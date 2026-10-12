@@ -1,0 +1,97 @@
+:root {
+    --ts-color-canvas: #101010;
+    --ts-color-raised: #151515;
+    --ts-color-panel: #191919;
+    --ts-color-thumbnail: #0D0D0D;
+    --ts-color-border: #3A3A3A;
+    --ts-color-borderStrong: #686868;
+    --ts-color-text: #EEEEEE;
+    --ts-color-textSecondary: #C9C9C9;
+    --ts-color-textMuted: #ABABAB;
+    --ts-color-hover: #303030;
+    --ts-color-pressed: #484848;
+    --ts-color-primary: #EEEEEE;
+    --ts-color-primaryText: #101010;
+    --ts-type-ui: "Cascadia Code", Consolas, monospace;
+    --ts-type-technical: "Cascadia Code", Consolas, monospace;
+    --ts-type-display: "Science Gothic", "Cascadia Code", sans-serif;
+    --ts-type-hero-size: 34px;
+    --ts-type-hero-lineHeight: 42px;
+    --ts-type-hero-weight: 700;
+    --ts-type-section-size: 25px;
+    --ts-type-section-weight: 700;
+    --ts-type-cardTitle-size: 16px;
+    --ts-type-cardTitle-weight: 600;
+    --ts-type-body-size: 15px;
+    --ts-type-body-lineHeight: 23px;
+    --ts-type-uiDefault-size: 13px;
+    --ts-space-2xs: 4px;
+    --ts-space-xs: 8px;
+    --ts-space-sm: 10px;
+    --ts-space-md: 16px;
+    --ts-space-lg: 22px;
+    --ts-space-xl: 28px;
+    --ts-space-2xl: 32px;
+    --ts-layout-pageHorizontal: 32px;
+    --ts-layout-pageTop: 8px;
+    --ts-layout-pageBottom: 24px;
+    --ts-layout-bannerGap: 16px;
+    --ts-layout-heroHeight: 250px;
+    --ts-layout-featureHeight: 220px;
+    --ts-layout-cardImageHeight: 156px;
+    --ts-layout-minimumWindowWidth: 560px;
+    --ts-layout-wideReferenceWidth: 1220px;
+    --ts-shape-cornerRadius: 0px;
+    --ts-shape-borderWidth: 1px;
+}
+
+[data-tessera-theme="light"] {
+    --ts-color-canvas: #E5E2D5;
+    --ts-color-raised: #EEEBE0;
+    --ts-color-panel: #D8D5C8;
+    --ts-color-thumbnail: #CFCCBF;
+    --ts-color-border: #AAA99B;
+    --ts-color-borderStrong: #74766D;
+    --ts-color-text: #383B35;
+    --ts-color-textSecondary: #50534C;
+    --ts-color-textMuted: #686B62;
+    --ts-color-hover: #C9C6B9;
+    --ts-color-pressed: #BBB8AB;
+    --ts-color-primary: #383B35;
+    --ts-color-primaryText: #EEEBE0;
+    --ts-color-accent: #383B35;
+}
+
+[data-tessera-theme="dark"] {
+    --ts-color-canvas: #101010;
+    --ts-color-raised: #151515;
+    --ts-color-panel: #191919;
+    --ts-color-thumbnail: #0D0D0D;
+    --ts-color-border: #3A3A3A;
+    --ts-color-borderStrong: #686868;
+    --ts-color-text: #EEEEEE;
+    --ts-color-textSecondary: #C9C9C9;
+    --ts-color-textMuted: #ABABAB;
+    --ts-color-hover: #303030;
+    --ts-color-pressed: #484848;
+    --ts-color-primary: #EEEEEE;
+    --ts-color-primaryText: #101010;
+    --ts-color-accent: #EEEEEE;
+}
+
+[data-tessera-theme="contrast"] {
+    --ts-color-canvas: #0C0C0C;
+    --ts-color-raised: #171717;
+    --ts-color-panel: #202020;
+    --ts-color-thumbnail: #0A0A0A;
+    --ts-color-border: #4B4B4B;
+    --ts-color-borderStrong: #808080;
+    --ts-color-text: #F1F1F1;
+    --ts-color-textSecondary: #D2D2D2;
+    --ts-color-textMuted: #AEAEAE;
+    --ts-color-hover: #343434;
+    --ts-color-pressed: #505050;
+    --ts-color-primary: #F1F1F1;
+    --ts-color-primaryText: #0C0C0C;
+    --ts-color-accent: #FF7424;
+}
