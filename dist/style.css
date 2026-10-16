@@ -28,7 +28,6 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--ts-color-accent
 .imprint-name-art { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
 .imprint-copy h1 { pointer-events: auto; cursor: default; touch-action: manipulation; }
 .imprint-copy h1.is-fragmenting { opacity: 0; }
-.orange-dot { color: var(--ts-color-accent); }
 .imprint-copy .social-links { margin-top: 30px; }
 .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--ts-color-panel); border: 1px solid var(--ts-color-borderStrong); padding: 14px 20px; opacity: 0; pointer-events: none; max-width: min(420px, 90vw); z-index: 5; font-size: 11px; transition: opacity .2s; }
 .toast.visible { opacity: 1; }
