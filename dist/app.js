@@ -4,7 +4,6 @@ let artwork = null;
 let animationFrame = 0;
 let previousFrame = 0;
 let clock = 0;
-let toastTimer = 0;
 const previewProfile = new PreviewProfile();
 
 function randomGenerator(seed)
@@ -293,14 +292,6 @@ async function initialize()
         if (paused) artwork.render(clock, 0);
     });
     document.addEventListener('visibilitychange', startAnimation);
-    for (const button of document.querySelectorAll('[data-preview-link]'))
-        button.addEventListener('click', () => {
-            const toast = document.querySelector('.toast');
-            toast.textContent = 'LinkedIn is a visual preview. Your profile URL can be added later.';
-            toast.classList.add('visible');
-            clearTimeout(toastTimer);
-            toastTimer = setTimeout(() => { toast.classList.remove('visible'); toast.textContent = ''; }, 3200);
-        });
     startAnimation();
 }
 

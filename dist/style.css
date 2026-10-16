@@ -46,13 +46,13 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--ts-color-accent
     .eyebrow { font-size: 8px; letter-spacing: .1em; }
     .imprint-copy p { font-size: 12px; }
     .social-links { width: 100%; gap: 8px; }
-    .social-links a, .social-links button { flex: 1; min-width: 0; gap: 15px; padding: 14px 16px; font-size: 11px; }
+    .social-links a, .social-links button { flex: 1 1 140px; min-width: 0; gap: 15px; padding: 14px 16px; font-size: 11px; }
     .life-divider { height: 48px; }
     .imprint-content { min-height: 460px; padding: 42px 22px; }
     .imprint-art { opacity: .45; mask-image: linear-gradient(#000 5%, #0006 35%, #0006 68%, #000); }
     .imprint-copy { width: 100%; margin-left: 0; }
     .imprint-copy h1 { font-size: clamp(30px, 11.6vw, 70px); margin: 16px 0 20px; letter-spacing: -.065em; white-space: nowrap; }
     .imprint-copy h1 > span { display: inline; }
-    .imprint-copy .social-links { width: 100%; flex-direction: row; margin-top: 22px; }
+    .imprint-copy .social-links { width: 100%; flex-direction: row; flex-wrap: wrap; margin-top: 22px; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
