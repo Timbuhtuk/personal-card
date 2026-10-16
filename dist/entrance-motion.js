@@ -4,7 +4,8 @@ class EntranceMotion
         impulse: { number: '01', title: 'Impulse', duration: 2100, description: 'Triangles assemble the name. A pulse releases the rest of the page.' },
         gravity: { number: '02', title: 'Gravity', duration: 2250, description: 'The name attracts the scene, then releases it along curved paths.' },
         plotter: { number: '03', title: 'Plotter', duration: 2650, description: 'Letter outlines, button frames and contour lines draw themselves into place.' },
-        split: { number: '04', title: 'Split', duration: 2150, description: 'A fine slit opens the name, then separates to reveal the whole scene.' }
+        split: { number: '04', title: 'Split', duration: 2150, description: 'A fine slit opens the name, then separates to reveal the whole scene.' },
+        hybrid: { number: '05', title: 'Hybrid', duration: 2850, description: 'Plotter draws the name. Then Split opens the background and the rest of the page.' }
     };
 
     static progress(time, start, end) { return Math.max(0, Math.min(1, (time - start) / (end - start))); }

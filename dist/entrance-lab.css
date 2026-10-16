@@ -24,7 +24,7 @@
 @media (hover: hover) and (pointer: fine) {
     .entrance-controls button:hover { border-color: var(--ts-color-textSecondary); }
 }
-@media (max-width: 700px) {
+@media (max-width: 850px) {
     .entrance-controls { inset: 8px 10px auto; padding: 9px 10px; }
     .entrance-toolbar { gap: 8px; flex-wrap: wrap; }
     .entrance-label { display: none; }

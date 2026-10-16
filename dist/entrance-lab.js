@@ -484,6 +484,19 @@
             const title = motion.out(time, 240, 850);
             this.heading.style.clipPath = `inset(${(1 - title) * 50}% 0)`;
             this.heading.style.opacity = time >= 240 ? 1 : 0;
+            this.revealSplitPage(time);
+        }
+
+        hybrid()
+        {
+            const time = this.time;
+            this.heading.style.opacity = time >= 1200 ? 1 : 0;
+            if (time < 1200) this.drawNameOutline();
+            this.revealSplitPage(time - 600, motion.smooth(time, 1100, 1290));
+        }
+
+        revealSplitPage(time, lineOpacity = 1)
+        {
             const opening = motion.out(time, 690, 1870);
             const top = this.center.y * (1 - opening);
             const bottom = this.center.y + (this.height - this.center.y) * opening;
@@ -500,7 +513,7 @@
                 element.style.clipPath = `inset(${(1 - progress) * 50}% 0)`;
             });
             const length = motion.out(time, 0, 600) * motion.mix(this.nameRight - this.nameLeft + 32, this.width, opening);
-            const opacity = (1 - motion.smooth(time, 1350, 1900)) * .7;
+            const opacity = (1 - motion.smooth(time, 1350, 1900)) * .7 * lineOpacity;
             this.context.strokeStyle = `rgba(241,241,241,${opacity})`;
             this.context.lineWidth = 1;
             this.context.beginPath();

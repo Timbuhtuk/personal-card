@@ -18,7 +18,7 @@ Run `node server.cjs`, then open `http://localhost:6007/`.
 
 ## Entrance studies
 
-Open `entrance-lab.html` to compare four entrance animations on the actual card: Impulse, Gravity, Plotter and Split. The main page keeps its current behavior. The preview waits for the document, fonts, triangle atlas and first contour frame before starting. It has replay, pause, half-speed and timeline controls; each variant can be linked with `?variant=impulse` (or `gravity`, `plotter`, `split`). During playback the existing simulation is frozen, then resumes after the scene settles. Reduced motion skips automatic playback; the timeline still allows inspecting individual frames. Resizing settles the scene so a replay can use its new dimensions.
+Open `entrance-lab.html` to compare five entrance animations on the actual card: Impulse, Gravity, Plotter, Split and Hybrid. Hybrid uses Plotter's outlined-name sequence, then opens the background and other content with Split's reveal; use `?variant=hybrid` to open it directly. Plotter and Split remain available individually. The main page keeps its current behavior. The preview waits for the document, fonts, triangle atlas and first contour frame before starting. It has replay, pause, half-speed and timeline controls; each variant can be linked with `?variant=impulse` (or `gravity`, `plotter`, `split`, `hybrid`). During playback the existing simulation is frozen, then resumes after the scene settles. Reduced motion skips automatic playback; the timeline still allows inspecting individual frames. Resizing settles the scene so a replay can use its new dimensions.
 
 ## Checks
 
