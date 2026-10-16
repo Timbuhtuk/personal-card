@@ -12,7 +12,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--ts-color-accent
 .imprint-copy p { color: var(--ts-color-textMuted); font-size: 14px; margin: 0; }
 .social-links { display: flex; gap: 10px; }
 .social-links a, .social-links button { display: flex; align-items: center; justify-content: space-between; gap: 40px; min-width: 144px; padding: 17px 20px; background: transparent; border: 1px solid var(--ts-color-border); font-size: 12px; transition: background .18s, border-color .18s; }
-.social-links a:hover, .social-links button:hover, .social-links a:focus-visible, .social-links button:focus-visible { background: var(--ts-color-text); color: var(--ts-color-canvas); border-color: var(--ts-color-text); }
+.social-links a:focus-visible, .social-links button:focus-visible { background: var(--ts-color-text); color: var(--ts-color-canvas); border-color: var(--ts-color-text); }
 .social-links span { font-size: 18px; }
 .social-logo { width: 18px; height: 18px; vertical-align: middle; }
 .life-divider { width: 100vw; height: 64px; align-self: center; flex: none; overflow: hidden; border: 0; background: var(--ts-color-canvas); }
@@ -32,6 +32,9 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--ts-color-accent
 .imprint-copy .social-links { margin-top: 30px; }
 .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--ts-color-panel); border: 1px solid var(--ts-color-borderStrong); padding: 14px 20px; opacity: 0; pointer-events: none; max-width: min(420px, 90vw); z-index: 5; font-size: 11px; transition: opacity .2s; }
 .toast.visible { opacity: 1; }
+@media (min-width: 601px) and (hover: hover) and (pointer: fine) {
+    .social-links a:hover, .social-links button:hover { background: var(--ts-color-text); color: var(--ts-color-canvas); border-color: var(--ts-color-text); }
+}
 @media (max-width: 600px) {
     .eyebrow { font-size: 8px; letter-spacing: .1em; }
     .imprint-copy p { font-size: 12px; }
