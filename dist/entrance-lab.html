@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en" data-tessera-theme="contrast" class="entrance-pending">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Timbuhtuk — personal space. Find me on GitHub, LinkedIn and Telegram.">
+    <meta name="theme-color" content="#0c0c0c">
+    <title>Timbuhtuk — Entrance studies</title>
+    <link rel="stylesheet" href="assets/styles/fonts.css">
+    <link rel="stylesheet" href="assets/styles/tokens.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="entrance-lab.css">
+    <script src="contour-field.js" defer></script>
+    <script src="contour-scheduler.js" defer></script>
+    <script src="contour-viewport.js" defer></script>
+    <script src="triangle-name.js" defer></script>
+    <script src="preview-profile.js" defer></script>
+    <script src="app.js" defer></script>
+    <script src="entrance-motion.js" defer></script>
+    <script src="entrance-lab.js" defer></script>
+</head>
+<body>
+    <header class="entrance-controls" aria-label="Entrance animation preview">
+        <div class="entrance-toolbar">
+            <div class="entrance-label">ENTRANCE<br>STUDIES</div>
+            <nav class="entrance-variants" aria-label="Animation variants">
+                <button type="button" data-variant="impulse" aria-pressed="true" disabled><span>01</span>Impulse</button>
+                <button type="button" data-variant="gravity" aria-pressed="false" disabled><span>02</span>Gravity</button>
+                <button type="button" data-variant="plotter" aria-pressed="false" disabled><span>03</span>Plotter</button>
+                <button type="button" data-variant="split" aria-pressed="false" disabled><span>04</span>Split</button>
+            </nav>
+            <div class="entrance-actions">
+                <button type="button" id="entrance-replay" disabled>Replay</button>
+                <button type="button" id="entrance-play" disabled>Pause</button>
+                <button type="button" id="entrance-slow" aria-pressed="false" disabled>0.5×</button>
+            </div>
+        </div>
+        <div class="entrance-timeline">
+            <input type="range" id="entrance-seek" aria-label="Animation progress" min="0" max="1000" step="1" value="0" disabled>
+            <output class="entrance-time" id="entrance-time">0.00 / 2.10 s</output>
+        </div>
+        <p class="entrance-description"><span id="entrance-description">Preparing the fonts and the first background frame.</span><span class="entrance-status" id="entrance-status" role="status">Loading</span></p>
+    </header>
+    <main>
+        <section class="imprint" id="imprint" aria-label="Personal space">
+            <div class="life-divider life-divider--top" aria-hidden="true"><canvas></canvas></div>
+            <div class="imprint-content">
+                <div class="imprint-art art-surface"><canvas aria-hidden="true"></canvas></div>
+                <div class="imprint-copy"><div class="eyebrow">SOLVED BEFORE YOU KNEW IT WAS A PROBLEM.</div><h1>TIMBU<span>HTUK</span></h1><p>Find me elsewhere.</p><div class="social-links">
+                    <a href="https://github.com/Timbuhtuk" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true"><svg class="social-logo" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.49.5.09.68-.22.68-.48v-1.86c-2.78.6-3.37-1.18-3.37-1.18-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.64-1.33-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02A9.6 9.6 0 0 1 12 6.83c.85 0 1.71.11 2.51.34 1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.58 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 22 12c0-5.52-4.48-10-10-10Z" /></svg></span></a>
+                    <a href="https://www.linkedin.com/in/tymofii-pankovskyi-2827bb331/" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true"><svg class="social-logo" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><circle cx="5" cy="5" r="1.7" /><path d="M3.5 9h3v11h-3zM10 9h3v1.5c.7-1.1 1.8-1.8 3.4-1.8 3.1 0 4.1 1.8 4.1 4.8V20h-3v-6c0-1.7-.5-2.6-1.8-2.6-1.5 0-2.7 1-2.7 3.2V20h-3Z" /></svg></span></a>
+                    <a href="https://t.me/timbuhtuk" target="_blank" rel="noopener noreferrer">Telegram <span aria-hidden="true"><svg class="social-logo" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="m3 10 17-6-4 16-5-5-4 3 1-6-5-2Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /><path d="m8 12 8-5-5 8" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /></svg></span></a>
+                </div></div>
+            </div>
+            <div class="life-divider life-divider--bottom" aria-hidden="true"><canvas></canvas></div>
+        </section>
+    </main>
+    <div class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

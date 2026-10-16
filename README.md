@@ -16,6 +16,10 @@ The name, slogan and account links stay centered at every screen width. The butt
 
 Run `node server.cjs`, then open `http://localhost:6007/`.
 
+## Entrance studies
+
+Open `entrance-lab.html` to compare four entrance animations on the actual card: Impulse, Gravity, Plotter and Split. The main page keeps its current behavior. The preview waits for the document, fonts, triangle atlas and first contour frame before starting. It has replay, pause, half-speed and timeline controls; each variant can be linked with `?variant=impulse` (or `gravity`, `plotter`, `split`). During playback the existing simulation is frozen, then resumes after the scene settles. Reduced motion skips automatic playback; the timeline still allows inspecting individual frames. Resizing settles the scene so a replay can use its new dimensions.
+
 ## Checks
 
 ```sh
@@ -23,6 +27,7 @@ node contour-field.test.cjs
 node triangle-name.test.cjs
 node contour-worker.test.cjs
 node contour-viewport.test.cjs
+node entrance-motion.test.cjs
 ```
 
 Optional local performance diagnostics: open `?profile=1&seed=2` and keep the pointer over the name. The console reports a sample after warmup. Normal visits use a random seed and no diagnostics.
