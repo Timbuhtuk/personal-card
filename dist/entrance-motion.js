@@ -5,7 +5,8 @@ class EntranceMotion
         gravity: { number: '02', title: 'Gravity', duration: 2250, description: 'The name attracts the scene, then releases it along curved paths.' },
         plotter: { number: '03', title: 'Plotter', duration: 2650, description: 'Letter outlines, button frames and contour lines draw themselves into place.' },
         split: { number: '04', title: 'Split', duration: 2150, description: 'A fine slit opens the name, then separates to reveal the whole scene.' },
-        hybrid: { number: '05', title: 'Hybrid', duration: 2850, description: 'Plotter draws the name. Then Split opens the background and the rest of the page.' }
+        hybrid: { number: '05', title: 'Hybrid', duration: 2850, description: 'Plotter draws the name. Then Split opens the background and the rest of the page.' },
+        hybridTrace: { number: '06', title: 'Hybrid+', duration: 2850, description: 'Plotter draws the name and contour lines while Split opens the page.' }
     };
 
     static progress(time, start, end) { return Math.max(0, Math.min(1, (time - start) / (end - start))); }

@@ -428,13 +428,8 @@
             context.stroke();
         }
 
-        plotter()
+        drawContourLines(time)
         {
-            const time = this.time;
-            this.heading.style.opacity = time >= 1200 ? 1 : 0;
-            if (time < 1200) this.drawNameOutline();
-            artwork.canvas.style.opacity = 0;
-            this.plot.hidden = false;
             this.plotContext.clearRect(0, 0, artwork.width, artwork.height);
             this.plotContext.lineWidth = 1.3;
             this.plotContext.lineCap = this.plotContext.lineJoin = 'round';
@@ -446,6 +441,16 @@
             }
             this.plotContext.fillStyle = `rgba(255,116,36,${motion.smooth(time, 1900, 2400)})`;
             for (const frame of this.geometry.frames) this.plotContext.fillRect(frame.center.x - 3, frame.center.y - 3, 6, 6);
+        }
+
+        plotter()
+        {
+            const time = this.time;
+            this.heading.style.opacity = time >= 1200 ? 1 : 0;
+            if (time < 1200) this.drawNameOutline();
+            artwork.canvas.style.opacity = 0;
+            this.plot.hidden = false;
+            this.drawContourLines(time);
             this.eyebrow.style.opacity = motion.smooth(time, 1050, 1550);
             this.caption.style.opacity = motion.smooth(time, 1180, 1680);
             this.links.forEach((link, q) => {
@@ -493,6 +498,12 @@
             this.heading.style.opacity = time >= 1200 ? 1 : 0;
             if (time < 1200) this.drawNameOutline();
             this.revealSplitPage(time - 600, motion.smooth(time, 1100, 1290));
+        }
+
+        hybridTrace()
+        {
+            this.hybrid();
+            this.drawContourLines(this.time - 300);
         }
 
         revealSplitPage(time, lineOpacity = 1)

@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const Motion = new Function(fs.readFileSync(path.join(__dirname, 'dist/entrance-motion.js'), 'utf8') + '\nreturn EntranceMotion;')();
 
-assert.deepEqual(Object.keys(Motion.variants), ['impulse', 'gravity', 'plotter', 'split', 'hybrid']);
+assert.deepEqual(Object.keys(Motion.variants), ['impulse', 'gravity', 'plotter', 'split', 'hybrid', 'hybridTrace']);
 for (const variant of Object.values(Motion.variants)) assert.ok(variant.duration > 1500 && variant.duration < 3000);
 assert.equal(Motion.progress(-100, 0, 100), 0);
 assert.equal(Motion.progress(200, 0, 100), 1);

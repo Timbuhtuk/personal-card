@@ -24,7 +24,7 @@
 @media (hover: hover) and (pointer: fine) {
     .entrance-controls button:hover { border-color: var(--ts-color-textSecondary); }
 }
-@media (max-width: 850px) {
+@media (max-width: 1024px) {
     .entrance-controls { inset: 8px 10px auto; padding: 9px 10px; }
     .entrance-toolbar { gap: 8px; flex-wrap: wrap; }
     .entrance-label { display: none; }
@@ -36,6 +36,11 @@
     .entrance-timeline { margin-top: 8px; gap: 8px; }
     .entrance-description { font-size: 8px; }
     .entrance-description > span:first-child { max-width: 76%; }
+}
+@media (max-width: 600px) {
+    .entrance-variants { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
+    .entrance-variants button { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 5px; }
+    .entrance-variants button span { display: inline; margin: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
     .entrance-controls { backdrop-filter: none; }
