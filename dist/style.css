@@ -21,26 +21,17 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--ts-color-accent
 .imprint-content { flex: 1; position: relative; display: flex; align-items: center; min-height: 520px; padding: 48px 5vw; overflow: hidden; isolation: isolate; }
 .imprint-art { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .7; mask-image: linear-gradient(90deg, #000 25%, #0008 54%, #0004 72%, #0009); pointer-events: none; }
 .imprint-art canvas { touch-action: pan-y; image-rendering: auto; }
-.imprint-copy { position: relative; z-index: 3; width: 46%; max-width: 560px; margin-left: 54%; pointer-events: none; }
+.imprint-copy { position: relative; z-index: 3; width: 100%; max-width: 1100px; margin: 0 auto; text-align: center; pointer-events: none; }
+.imprint-copy .eyebrow, .imprint-copy .social-links { justify-content: center; }
 .imprint-copy .social-links > * { pointer-events: auto; }
-.imprint-copy h1 { font-family: var(--ts-type-display); font-size: clamp(60px, min(7.6vw, 11svh), 128px); line-height: .98; letter-spacing: -.065em; font-weight: 650; margin: 32px 0; }
-.imprint-copy h1 > span { display: block; }
+.imprint-copy h1 { font-family: var(--ts-type-display); font-size: clamp(52px, min(5.3vw, 11svh), 112px); line-height: .98; letter-spacing: -.065em; font-weight: 650; margin: 32px 0; white-space: nowrap; }
+.imprint-copy h1 > span { display: inline; }
 .imprint-name-art { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
 .imprint-copy h1 { pointer-events: auto; cursor: default; touch-action: manipulation; }
 .imprint-copy h1.is-fragmenting { opacity: 0; }
 .imprint-copy .social-links { margin-top: 30px; }
 .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--ts-color-panel); border: 1px solid var(--ts-color-borderStrong); padding: 14px 20px; opacity: 0; pointer-events: none; max-width: min(420px, 90vw); z-index: 5; font-size: 11px; transition: opacity .2s; }
 .toast.visible { opacity: 1; }
-@media (min-width: 1024px) {
-    .imprint-copy { width: 100%; max-width: 1100px; margin: 0 auto; text-align: center; }
-    .imprint-copy .eyebrow, .imprint-copy .social-links { justify-content: center; }
-    .imprint-copy h1 { font-size: clamp(52px, min(5.3vw, 11svh), 112px); white-space: nowrap; }
-    .imprint-copy h1 > span { display: inline; }
-}
-@media (max-width: 900px) {
-    .imprint-copy .social-links { flex-direction: column; width: 190px; }
-    .imprint-copy { width: 48%; margin-left: 52%; }
-}
 @media (max-width: 600px) {
     .eyebrow { font-size: 8px; letter-spacing: .1em; }
     .imprint-copy p { font-size: 12px; }
@@ -49,9 +40,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--ts-color-accent
     .life-divider { height: 48px; }
     .imprint-content { min-height: 460px; padding: 42px 22px; }
     .imprint-art { opacity: .45; mask-image: linear-gradient(#000 5%, #0006 35%, #0006 68%, #000); }
-    .imprint-copy { width: 100%; margin-left: 0; }
     .imprint-copy h1 { font-size: clamp(30px, 11.6vw, 70px); margin: 16px 0 20px; letter-spacing: -.065em; white-space: nowrap; }
-    .imprint-copy h1 > span { display: inline; }
     .imprint-copy .social-links { width: 100%; flex-direction: row; flex-wrap: wrap; margin-top: 22px; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }

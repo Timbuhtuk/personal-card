@@ -10,7 +10,7 @@ The page uses self-hosted Science Gothic and Cascadia Code fonts with Tessera de
 
 One to three figures start at random positions, with curved pressure boundaries, 32 px contour spacing and up to 15 contour levels per figure. Strokes are 1.3 px thick. The gap between neighboring figures follows the same 32 px spacing. Geometry runs in a worker; each new mesh is drawn once. Supersampling smooths the strokes while the Life cells stay crisp. Hovering or clicking the name scatters its fragments, which return when the pointer leaves.
 
-The account buttons open [GitHub](https://github.com/Timbuhtuk), [LinkedIn](https://www.linkedin.com/in/tymofii-pankovskyi-2827bb331/) and [Telegram](https://t.me/timbuhtuk). On small screens the links wrap to keep the labels and logos readable.
+The name, slogan and account links stay centered at every screen width. The buttons open [GitHub](https://github.com/Timbuhtuk), [LinkedIn](https://www.linkedin.com/in/tymofii-pankovskyi-2827bb331/) and [Telegram](https://t.me/timbuhtuk). On small screens the links wrap to keep the labels and logos readable.
 
 ## Local preview
 
