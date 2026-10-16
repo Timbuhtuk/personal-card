@@ -188,12 +188,18 @@ class ProceduralImprint extends Artwork
         this.name = new TriangleName(panel, () => !paused && !reducedMotion.matches);
     }
 
-    renderScale()
+    resize()
     {
-        // Supersample contours on standard displays; keep the full-screen buffer bounded.
-        const scale = Math.max(window.devicePixelRatio || 1, 2);
-        const budget = Math.sqrt(16000000 / Math.max(1, this.width * this.height));
-        return Math.min(scale, 3, Math.max(1, budget));
+        const bounds = this.canvas.getBoundingClientRect();
+        const viewport = contourViewport(bounds.width, bounds.height, window.devicePixelRatio);
+        this.width = viewport.width;
+        this.height = viewport.height;
+        this.canvas.width = viewport.pixelWidth;
+        this.canvas.height = viewport.pixelHeight;
+        this.context.setTransform(viewport.pixelWidth / this.width, 0, 0, viewport.pixelHeight / this.height, 0, 0);
+        this.initialize();
+        this.render(clock, 0);
+        this.panel.classList.add('ready');
     }
 
     initialize()
@@ -282,10 +288,19 @@ async function initialize()
     artwork.resize();
     if (location.hash) history.replaceState(null, '', location.pathname + location.search);
     let resizeTimer;
-    window.addEventListener('resize', () => {
+    const resizeArtwork = () => {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(() => artwork.resize(), 120);
-    });
+    };
+    window.addEventListener('resize', resizeArtwork);
+    const watchPixelRatio = () => {
+        const resolution = window.matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`);
+        resolution.addEventListener('change', () => {
+            watchPixelRatio();
+            resizeArtwork();
+        }, { once: true });
+    };
+    watchPixelRatio();
     reducedMotion.addEventListener('change', event => {
         paused = event.matches;
         startAnimation();

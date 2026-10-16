@@ -28,6 +28,7 @@ jobs:
           node contour-field.test.cjs
           node triangle-name.test.cjs
           node contour-worker.test.cjs
+          node contour-viewport.test.cjs
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
