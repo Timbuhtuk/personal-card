@@ -1,14 +1,22 @@
 <!doctype html>
-<html lang="en" data-tessera-theme="contrast" class="entrance-pending">
+<html lang="en" data-tessera-theme="contrast">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Timbuhtuk — personal space. Find me on GitHub, LinkedIn and Telegram.">
     <meta name="theme-color" content="#0c0c0c">
+    <script>
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+        {
+            document.documentElement.classList.add('entrance-pending');
+            setTimeout(() => document.documentElement.classList.remove('entrance-pending'), 8000);
+        }
+    </script>
     <title>Timbuhtuk — Entrance studies</title>
     <link rel="stylesheet" href="assets/styles/fonts.css">
     <link rel="stylesheet" href="assets/styles/tokens.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="entrance.css">
     <link rel="stylesheet" href="entrance-lab.css">
     <script src="contour-field.js" defer></script>
     <script src="contour-scheduler.js" defer></script>
@@ -17,6 +25,7 @@
     <script src="preview-profile.js" defer></script>
     <script src="app.js" defer></script>
     <script src="entrance-motion.js" defer></script>
+    <script src="entrance-animation.js" defer></script>
     <script src="entrance-lab.js" defer></script>
 </head>
 <body>
