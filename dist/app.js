@@ -227,7 +227,7 @@ class ProceduralImprint extends Artwork
         this.clear();
         const context = this.context;
         const coordinates = result.coordinates;
-        context.lineWidth = 1.0625;
+        context.lineWidth = 1.3;
         context.lineJoin = 'round';
         context.lineCap = 'round';
         for (const frame of result.frames)

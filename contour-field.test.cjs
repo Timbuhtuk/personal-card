@@ -134,8 +134,9 @@ function minimumGap(first, second)
     return distance;
 }
 
-const outer = gapFrames.map(frame => frame.paths.filter(contour => contour.level === 8));
-const secondLevel = gapFrames[0].paths.filter(contour => contour.level === 24);
+const firstLevel = gapField.lineSpacing / 2;
+const outer = gapFrames.map(frame => frame.paths.filter(contour => contour.level === firstLevel));
+const secondLevel = gapFrames[0].paths.filter(contour => contour.level === firstLevel + gapField.lineSpacing);
 const figureGap = minimumGap(outer[0], outer[1]);
 const lineGap = minimumGap(outer[0], secondLevel);
 assert.ok(Math.abs(figureGap - gapField.lineSpacing) < 1, `Figure gap was ${figureGap}px`);

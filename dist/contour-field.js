@@ -9,7 +9,7 @@ class ContourField
         this.frames = [];
         this.displayFrames = [];
         this.dragged = null;
-        this.lineSpacing = 16;
+        this.lineSpacing = 32;
         this.meshTime = -Infinity;
         this.dirty = true;
         const count = 1 + Math.floor(this.random() * 3);
@@ -187,7 +187,7 @@ class ContourField
     {
         const layers = [];
         const firstLevel = this.lineSpacing / 2;
-        const layerCount = Math.min(30, Math.floor((maximum - firstLevel) / this.lineSpacing) + 1);
+        const layerCount = Math.min(15, Math.floor((maximum - firstLevel) / this.lineSpacing) + 1);
         const cases = [[], [[3, 0]], [[0, 1]], [[3, 1]], [[1, 2]], null, [[0, 2]], [[3, 2]], [[2, 3]], [[0, 2]], null, [[1, 2]], [[1, 3]], [[0, 1]], [[0, 3]], []];
         for (let y = 0; y < rows - 1; y++)
             for (let x = 0; x < columns - 1; x++)
