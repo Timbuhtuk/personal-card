@@ -28,11 +28,16 @@ jobs:
           node contour-field.test.cjs
           node triangle-name.test.cjs
           node contour-worker.test.cjs
+          node artwork-lifecycle.test.cjs
           node contour-viewport.test.cjs
           node entrance-motion.test.cjs
           node entrance-animation.test.cjs
           node logo-motion.test.cjs
           node about-navigation.test.cjs
+          node liquid-seam.test.cjs
+          node signal-cursor.test.cjs
+          node transition-motion.test.cjs
+          node transition-lifecycle.test.cjs
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

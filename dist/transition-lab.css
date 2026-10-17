@@ -1,0 +1,44 @@
+.transition-lab { min-height: 100svh; display: flex; flex-direction: column; }
+.transition-controls { position: relative; z-index: 30; padding: 18px max(20px, calc((100vw - 1120px) / 2)); border-bottom: 1px solid #333; background: #111; }
+.transition-heading, .transition-actions, .transition-timeline { display: flex; align-items: center; gap: 10px; }
+.transition-heading { justify-content: space-between; margin-bottom: 13px; }
+.transition-heading h2 { margin: 0; font-size: 10px; font-weight: 400; letter-spacing: .15em; }
+.transition-heading nav { display: flex; gap: 18px; font-size: 9px; color: #aaa; }
+.transition-heading a { text-decoration: underline; text-underline-offset: 4px; }
+.transition-variants { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 5px; }
+.transition-variants button { border: 1px solid #333; background: transparent; padding: 10px; text-align: left; font-size: 10px; min-height: 49px; }
+.transition-variants button small { display: block; color: #777; font-size: 7px; margin: 5px 0 0 24px; font-weight: 400; }
+.transition-variants button span { font-size: 8px; color: #777; margin-right: 9px; }
+.transition-variants button[aria-pressed="true"] { border-color: #bbb; background: #ffffff08; }
+.transition-variants button[aria-pressed="true"] span { color: #ff7828; }
+.transition-description { font-size: 10px; color: #aaa; line-height: 1.6; min-height: 16px; margin: 12px 0; }
+.transition-actions button { padding: 8px 12px; background: transparent; border: 1px solid #444; font-size: 10px; min-width: 74px; }
+.transition-actions button:first-child { border-color: #888; min-width: 136px; }
+.transition-actions button[aria-pressed="true"] { border-color: #ff7828; }
+.transition-actions button:disabled, .transition-variants button:disabled, .transition-timeline input:disabled { opacity: .4; cursor: wait; }
+.transition-status { margin-left: auto; font-size: 9px; color: #999; text-align: right; }
+.transition-timeline { margin-top: 10px; }
+.transition-timeline input { width: 100%; min-width: 30px; margin: 0; accent-color: #ddd; }
+.transition-timeline label { font-size: 8px; color: #777; }
+.transition-time { flex: none; font-size: 9px; width: 92px; text-align: right; color: #aaa; font-variant-numeric: tabular-nums; }
+.transition-lab main { flex: 1; display: flex; }
+.transition-lab .imprint { flex: 1; min-height: 0; }
+.transition-lab .imprint-content { min-height: 460px; perspective: 1200px; }
+.transition-home { position: absolute; inset: 0; display: flex; align-items: center; padding: inherit; background: var(--ts-color-canvas); backface-visibility: hidden; }
+.transition-lab .about-view { backface-visibility: hidden; }
+.transition-fx { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 15; pointer-events: none; }
+.transition-running .transition-home, .transition-running .about-view { will-change: transform, opacity, clip-path; }
+.transition-running .transition-home *, .transition-running .about-view * { pointer-events: none !important; }
+@media (hover: hover) and (pointer: fine) { .transition-controls button:hover { border-color: #aaa; } }
+@media (max-width: 700px) {
+    .transition-controls { padding: 14px; }
+    .transition-variants { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .transition-heading { align-items: flex-start; gap: 14px; }
+    .transition-heading nav { gap: 8px; font-size: 8px; }
+    .transition-heading h2 { font-size: 9px; }
+    .transition-actions { flex-wrap: wrap; gap: 6px; }
+    .transition-actions button { flex: 1; min-width: 60px; padding: 9px; font-size: 9px; }
+    .transition-status { flex-basis: 100%; text-align: left; margin: 3px 0 0; }
+    .transition-lab .imprint-content { min-height: 520px; }
+    .transition-description { font-size: 9px; }
+}

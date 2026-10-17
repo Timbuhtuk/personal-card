@@ -1,93 +1,40 @@
-const assert = require('node:assert/strict');
-const fs = require('node:fs');
-const path = require('node:path');
-const vm = require('node:vm');
-const source = fs.readFileSync(path.join(__dirname, 'dist/about.js'), 'utf8').replace('new AboutNavigation();', '');
-
-function fixture(hash = '')
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
+const source=fs.readFileSync(path.join(__dirname,'dist/about.js'),'utf8').replace('new AboutNavigation();','');
+const LiquidSeam=require('./dist/liquid-seam.js');
+function fixture(hash='',canvas=true)
 {
-    const events = () => ({ callbacks: {}, addEventListener(type, callback) { (this.callbacks[type] ||= []).push(callback); },
-        dispatch(type) { for (const callback of this.callbacks[type] || []) callback(); } });
-    const animations = [];
-    const node = () => Object.assign(events(), {
-        style: { removeProperty(name) { delete this[name]; } }, dataset: {}, hidden: false, inert: false,
-        getBoundingClientRect: () => ({ x: 0, y: 64, width: 1280, height: 720 }),
-        focus() { this.focused = true; },
-        animate(frames) {
-            let cancel;
-            const result = { frames, finished: new Promise((resolve, reject) => { cancel = () => reject(Error('cancelled')); }), cancel() { cancel(); } };
-            animations.push(result);
-            return result;
-        }
-    });
-    const classes = new Set();
-    const root = { classList: { add: (...names) => names.forEach(name => classes.add(name)), remove: (...names) => names.forEach(name => classes.delete(name)), contains: name => classes.has(name) } };
-    const selectors = new Map(['#imprint','.imprint-content','.imprint-copy','.about-link','#about','.about-inner','.about-back','#about-title'].map(name => [name,node()]));
-    selectors.get('#about').hidden = true;
-    selectors.get('#imprint').dataset.view = 'home';
-    selectors.get('.about-link').getBoundingClientRect = () => ({ x: 550, y: 420, width: 180, height: 20 });
-    const document = Object.assign(events(), { title: 'Card', documentElement: root,
-        querySelector(name) { assert.ok(selectors.has(name)); return selectors.get(name); } });
-    const location = { pathname: '/', search: '', hash };
-    const pushes = [];
-    const history = { pushState(state, unused, url) { pushes.push(url); location.hash = url.includes('#') ? '#' + url.split('#')[1] : ''; } };
-    const reducedMotion = Object.assign(events(), { matches: false });
-    const window = events();
-    const artwork = { name: { pointer: { active: true }, motion: { settle() {} }, render() {} } };
-    const context = vm.createContext({ document, window, location, history, reducedMotion, artwork });
-    vm.runInContext(source + '\nthis.Navigation = AboutNavigation;', context);
-    const navigation = new context.Navigation();
-    return { navigation, Navigation: context.Navigation, document, window, location, reducedMotion, selectors, classes, pushes, animations };
+    const events=()=>({callbacks:{},addEventListener(type,fn){(this.callbacks[type]||=[]).push(fn);},dispatch(type,event={}){for(const fn of this.callbacks[type]||[])fn(event);}});
+    const frames=new Map();let now=100,id=0;
+    const context=new Proxy({}, {get:(target,key)=>target[key]||((...args)=>{for(const value of args)if(typeof value==='number')assert.ok(Number.isFinite(value));}),set:(target,key,value)=>(target[key]=value,true)});
+    const node=()=>Object.assign(events(),{style:{},dataset:{},hidden:false,inert:false,
+        getBoundingClientRect:()=>({x:0,y:64,width:1280,height:720}),focus(){this.focused=true;},append(){},setAttribute(){},getContext:()=>canvas?context:null});
+    const classes=new Set(),root={classList:{add:(...names)=>names.forEach(n=>classes.add(n)),remove:(...names)=>names.forEach(n=>classes.delete(n)),contains:n=>classes.has(n)}};
+    const selectors=new Map(['#imprint','.imprint-content','.imprint-copy','.about-link','#about','.about-back','#about-title'].map(name=>[name,node()]));
+    selectors.get('#about').hidden=true;selectors.get('#imprint').dataset.view='home';
+    const document=Object.assign(events(),{title:'Card',documentElement:root,hidden:false,querySelector:n=>selectors.get(n),createElement:()=>node()});
+    const location={pathname:'/',search:'',hash},pushes=[],history={pushState(a,b,url){pushes.push(url);location.hash=url.includes('#')?'#'+url.split('#')[1]:'';}};
+    const reducedMotion=Object.assign(events(),{matches:false}),window=Object.assign(events(),{devicePixelRatio:2});
+    const artwork={name:{pointer:{active:true},motion:{settle(){}},render(){}}};
+    const sandbox={document,window,location,history,reducedMotion,artwork,LiquidSeam,requestAnimationFrame(fn){frames.set(++id,fn);return id;},cancelAnimationFrame(q){frames.delete(q);}};
+    vm.createContext(sandbox);vm.runInContext(source+';this.Navigation=AboutNavigation;',sandbox);
+    const navigation=new sandbox.Navigation();
+    async function flush(){for(let q=0;frames.size&&q<300;q++){now+=16;const current=[...frames];frames.clear();for(const [id,fn] of current)fn(now);await Promise.resolve();}await Promise.resolve();assert.equal(frames.size,0);}
+    return {navigation,selectors,document,window,location,pushes,reducedMotion,classes,frames,flush};
 }
-
-(async () => {
-    const sample = fixture();
-    let cases = 0;
-    for (const [width,height] of [[320,460],[390,748],[1280,592],[1920,1080],[7680,4320]])
-        for (const x of [-20,0,width*.2,width*.5,width,width+20])
-            for (const y of [-20,0,height*.2,height*.5,height,height+20])
-            {
-                const circle = sample.Navigation.circle(width,height,x,y);
-                for (const [cx,cy] of [[0,0],[width,0],[0,height],[width,height]])
-                    assert.ok(Math.hypot(circle.x-cx,circle.y-cy) < circle.radius, 'The wipe must erase every corner.');
-                cases++;
-            }
-    await sample.navigation.go('about', { animate:false });
-    assert.equal(sample.selectors.get('#imprint').dataset.view,'about');
-    assert.equal(sample.selectors.get('.imprint-copy').inert,true);
-    assert.equal(sample.selectors.get('#about').hidden,false);
-    assert.equal(sample.selectors.get('#about-title').focused,true);
-    assert.equal(sample.location.hash,'#about');
-    await sample.navigation.go('home', { animate:false });
-    assert.equal(sample.selectors.get('#about').hidden,true);
-    assert.equal(sample.selectors.get('.imprint-copy').inert,false);
-    assert.equal(sample.selectors.get('.about-link').focused,true);
-
-    const pending = sample.navigation.go('about');
-    assert.equal(sample.selectors.get('#imprint').dataset.view,'transition');
-    await sample.navigation.go('home', { animate:false });
-    await pending;
-    assert.equal(sample.selectors.get('#imprint').dataset.view,'home', 'A cancelled wipe must not reopen About.');
-    assert.equal(sample.navigation.running,false);
-    assert.equal(sample.classes.has('about-transitioning'),false);
-
-    const resizing = sample.navigation.go('about');
-    sample.window.dispatch('resize');
-    await resizing;
-    assert.equal(sample.selectors.get('#imprint').dataset.view,'about');
-    assert.equal(sample.navigation.running,false);
-
-    sample.reducedMotion.matches = true;
-    sample.location.hash = '';
-    const historyLength = sample.pushes.length;
-    sample.window.dispatch('popstate');
-    assert.equal(sample.selectors.get('#imprint').dataset.view,'home');
-    assert.equal(sample.pushes.length,historyLength,'Browser history must not create another entry.');
-    sample.location.hash = '#about';
-    sample.window.dispatch('hashchange');
-    assert.equal(sample.selectors.get('#imprint').dataset.view,'about');
-    const direct = fixture('#about');
-    assert.equal(direct.selectors.get('#imprint').dataset.view,'about','Direct links must open About.');
-    assert.equal(direct.pushes.length,0);
-    console.log(`${cases} circular wipes passed, plus cancellation, resize, reduced motion, history, direct links and focus restoration.`);
-})().catch(error => { console.error(error); process.exitCode = 1; });
+(async()=>{
+    const f=fixture(),n=f.navigation;
+    const open=n.go('about');assert.equal(f.selectors.get('#imprint').dataset.view,'transition');
+    await f.flush();await open;assert.equal(n.running,false);assert.equal(f.selectors.get('#imprint').dataset.view,'about');
+    assert.equal(f.selectors.get('.imprint-copy').inert,true);assert.equal(f.selectors.get('#about').hidden,false);assert.equal(f.selectors.get('#about-title').focused,true);
+    assert.equal(f.location.hash,'#about');
+    const close=n.go('home');const full=n.about.style.clipPath;assert.equal(full,`path("${LiquidSeam.geometry(1,1280,720).path}")`);
+    await f.flush();await close;assert.equal(f.selectors.get('#about').hidden,true);assert.equal(f.selectors.get('.imprint-copy').inert,false);assert.equal(f.selectors.get('.about-link').focused,true);
+    const stale=n.go('about');await n.go('home',{animate:false});await stale;assert.equal(n.panel.dataset.view,'home');assert.equal(n.running,false);assert.equal(f.frames.size,0);
+    const resize=n.go('about');f.window.dispatch('resize');await resize;assert.equal(n.panel.dataset.view,'about');assert.equal(n.running,false);
+    const hidden=n.go('home');f.document.hidden=true;f.document.dispatch('visibilitychange');await hidden;assert.equal(n.panel.dataset.view,'home');f.document.hidden=false;
+    f.reducedMotion.matches=true;f.location.hash='#about';const entries=f.pushes.length;f.window.dispatch('popstate');assert.equal(n.panel.dataset.view,'about');assert.equal(f.pushes.length,entries);
+    f.location.hash='';f.window.dispatch('hashchange');assert.equal(n.panel.dataset.view,'home');
+    const direct=fixture('#about');assert.equal(direct.navigation.panel.dataset.view,'about');assert.equal(direct.pushes.length,0);
+    const fallback=fixture('',false);await fallback.navigation.go('about');assert.equal(fallback.navigation.panel.dataset.view,'about');assert.equal(fallback.frames.size,0);
+    console.log('Liquid seam navigation passed: forward, exact reverse start, cancellation, resize, hidden tabs, reduced motion, browser history, direct About, focus and canvas fallback.');
+})().catch(e=>{console.error(e);process.exitCode=1;});
