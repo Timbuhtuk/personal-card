@@ -1,0 +1,32 @@
+.technology-stack { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 14px; width: min(476px, 100%); margin: 36px auto 0; padding: 0; list-style: none; }
+.technology-slot { display: flex; align-items: center; justify-content: center; width: calc((100% - 84px) / 7); height: 44px; min-width: 0; opacity: 0; }
+.technology-icon { display: block; width: 38px; height: 38px; max-width: 100%; object-fit: contain; filter: invert(1) brightness(.82); pointer-events: none; }
+.technology-icon--wide { width: 53px; height: 36px; }
+.technology-icon--tall { width: 34px; height: 43px; }
+.technology-ribbons { position: absolute; inset: 24px 28px; z-index: 2; pointer-events: none; opacity: 0; }
+.technology-ribbon { position: absolute; top: 0; bottom: 0; width: 62px; overflow: hidden; mask-image: linear-gradient(transparent, #000 15%, #000 85%, transparent); }
+.technology-ribbon--left { left: 0; }
+.technology-ribbon--right { right: 0; }
+.technology-track, .technology-sequence { display: flex; flex-direction: column; align-items: center; }
+.technology-sequence { flex: none; gap: 28px; padding-bottom: 28px; }
+.technology-ribbon .technology-icon { flex: none; width: 42px; height: 44px; max-width: 58px; }
+.technology-ribbon .technology-icon--wide { width: 58px; }
+.technology-ribbons-dock { display: none; margin: 34px auto 0; width: min(476px, 100%); opacity: 0; pointer-events: none; }
+.technology-ribbons-dock .technology-ribbon { position: relative; width: 100%; height: 50px; margin-top: 12px; mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
+.technology-ribbons-dock .technology-track { flex-direction: row; width: max-content; }
+.technology-ribbons-dock .technology-sequence { flex-direction: row; gap: 26px; padding: 0 26px 0 0; }
+.technology-ribbons-dock .technology-icon { flex: none; width: 44px; height: 38px; }
+.technology-ribbons-dock .technology-icon--wide { width: 58px; }
+.technology-drop-active .technology-slot { will-change: transform, opacity; }
+@media (max-width: 800px) {
+    .technology-ribbons { display: none; }
+    .technology-ribbons-dock:not([hidden]) { display: block; }
+}
+@media (max-width: 600px) {
+    .technology-stack { max-width: 320px; gap: 12px 10px; margin-top: 28px; }
+    .technology-slot { width: calc((100% - 40px) / 5); height: 40px; }
+    .technology-icon { width: 33px; height: 33px; }
+    .technology-icon--wide { width: 48px; height: 32px; }
+    .technology-icon--tall { height: 38px; }
+    .technology-ribbons-dock { margin-top: 25px; }
+}

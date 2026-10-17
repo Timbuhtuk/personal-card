@@ -198,6 +198,7 @@ class ProceduralImprint extends Artwork
         this.canvas.height = viewport.pixelHeight;
         this.context.setTransform(viewport.pixelWidth / this.width, 0, 0, viewport.pixelHeight / this.height, 0, 0);
         this.initialize();
+        this.geometry.request(clock);
         this.render(clock, 0);
         this.panel.classList.add('ready');
     }
@@ -219,6 +220,7 @@ class ProceduralImprint extends Artwork
     render(time, delta = 0)
     {
         for (const divider of this.dividers) divider.render(time, delta);
+        if (this.panel.dataset.view && this.panel.dataset.view !== 'home') return;
         this.name.render(delta, !paused && !reducedMotion.matches);
         this.geometry.request(time);
         this.paint();
@@ -286,7 +288,7 @@ async function initialize()
     await document.fonts.ready;
     artwork = new ProceduralImprint(document.querySelector('#imprint'));
     artwork.resize();
-    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    if (location.hash === '#imprint') history.replaceState(null, '', location.pathname + location.search);
     let resizeTimer;
     const resizeArtwork = () => {
         clearTimeout(resizeTimer);

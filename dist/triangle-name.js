@@ -210,6 +210,53 @@ class TriangleName
             tile.drawImage(buffer, -x, -y, buffer.width / scale, buffer.height / scale);
             tile.restore();
         }
+        // Cache a stationary triangular mesh beneath the moving fragments.
+        this.wireframe = document.createElement('canvas');
+        this.wireframe.width = buffer.width;
+        this.wireframe.height = buffer.height;
+        this.ink = { left, top, width: buffer.width / scale, height: buffer.height / scale };
+        const wire = this.wireframe.getContext('2d');
+        wire.scale(scale, scale);
+        const wireStep = step * 2;
+        wire.strokeStyle = '#ffffff';
+        wire.lineWidth = .65;
+        wire.beginPath();
+        for (let y = 0; y <= this.ink.height; y += wireStep)
+        {
+            wire.moveTo(0, y);
+            wire.lineTo(this.ink.width, y);
+        }
+        for (let x = 0; x <= this.ink.width; x += wireStep)
+        {
+            wire.moveTo(x, 0);
+            wire.lineTo(x, this.ink.height);
+        }
+        for (let y = 0; y < this.ink.height; y += wireStep)
+            for (let x = 0; x < this.ink.width; x += wireStep)
+            {
+                wire.moveTo(x + wireStep, y);
+                wire.lineTo(x, y + wireStep);
+            }
+        wire.stroke();
+        wire.globalCompositeOperation = 'destination-in';
+        wire.drawImage(buffer, 0, 0, this.ink.width, this.ink.height);
+        wire.globalCompositeOperation = 'source-over';
+        wire.textBaseline = 'alphabetic';
+        for (const letter of letters)
+        {
+            const style = letter.style;
+            wire.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+            const metrics = wire.measureText(letter.text);
+            const ascent = metrics.fontBoundingBoxAscent ?? parseFloat(style.fontSize) * .8;
+            const descent = metrics.fontBoundingBoxDescent ?? parseFloat(style.fontSize) * .2;
+            const baseline = letter.rect.top - bounds.top - top + letter.rect.height * ascent / (ascent + descent);
+            wire.strokeText(letter.text, letter.rect.left - bounds.left - left, baseline);
+        }
+        // Apply one tint after drawing so shared edges never become darker.
+        wire.globalCompositeOperation = 'source-in';
+        wire.fillStyle = 'rgba(241,241,241,.5)';
+        wire.fillRect(0, 0, this.ink.width, this.ink.height);
+        wire.globalCompositeOperation = 'source-over';
         this.motion = new TriangleMagnet(particles);
         this.visible = false;
     }
@@ -224,6 +271,7 @@ class TriangleName
         this.heading.classList.toggle('is-fragmenting', moving);
         this.visible = moving;
         if (!moving) return;
+        this.context.drawImage(this.wireframe, this.ink.left, this.ink.top, this.ink.width, this.ink.height);
         for (const particle of this.motion.particles)
         {
             this.context.save();

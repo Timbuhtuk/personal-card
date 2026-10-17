@@ -23,7 +23,7 @@
                 scrubber.value = String(Math.round(scene.time / scene.duration * 1000));
                 timeLabel.value = `${(scene.time / 1000).toFixed(2)} / ${(scene.duration / 1000).toFixed(2)} s`;
                 const action = scene.playing ? 'Pause' : 'Play';
-                const state = scene.playing ? 'Playing' : scene.time >= scene.duration ? 'Ready' : 'Paused';
+                const state = reducedMotion.matches ? 'Reduced motion' : scene.playing ? 'Playing' : scene.time >= scene.duration ? 'Ready' : 'Paused';
                 if (play.textContent !== action) play.textContent = action;
                 if (status.textContent !== state) status.textContent = state;
             }
@@ -38,7 +38,13 @@
         scrubber.addEventListener('input', () => animation.seek(Number(scrubber.value) / 1000));
         for (const control of document.querySelectorAll('.entrance-controls button, .entrance-controls input')) control.disabled = false;
         const requested = new URLSearchParams(location.search).get('variant');
-        animation.start(Object.hasOwn(EntranceMotion.variants, requested) ? requested : 'impulse');
+        if (location.hash === '#about')
+        {
+            animation.mode = 'hybridTrace';
+            animation.onStart(animation.mode);
+            animation.finish();
+        }
+        else animation.start(Object.hasOwn(EntranceMotion.variants, requested) ? requested : 'hybridTrace');
     }).catch(error => {
         root.classList.remove('entrance-pending', 'entrance-running');
         status.textContent = 'Preview unavailable';

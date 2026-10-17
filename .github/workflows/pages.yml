@@ -31,6 +31,8 @@ jobs:
           node contour-viewport.test.cjs
           node entrance-motion.test.cjs
           node entrance-animation.test.cjs
+          node logo-motion.test.cjs
+          node about-navigation.test.cjs
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
