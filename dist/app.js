@@ -222,7 +222,7 @@ class ProceduralImprint extends Artwork
     {
         for (const divider of this.dividers) divider.render(time, delta);
         const view = this.panel.dataset.view || 'home';
-        if (view === 'about') return;
+        if (view === 'about' || view === 'work') return;
         if (view === 'home') this.name.render(delta, !paused && !reducedMotion.matches);
         this.contourTime += delta;
         this.geometry.request(this.contourTime);

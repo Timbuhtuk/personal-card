@@ -1,0 +1,20 @@
+.text-link { position: relative; display: inline-block; text-decoration: none; transition: color .18s; }
+.text-link::after { content: ''; position: absolute; left: 0; right: 0; bottom: -4px; height: 1px; background: currentColor; pointer-events: none; }
+.text-link:focus-visible, .work-home:focus-visible .text-link { color: var(--ts-color-text, var(--text)); text-decoration: none; }
+.work-home-arrow { transition: transform .25s; }
+@keyframes text-link-sweep {
+    0% { transform: scaleX(1); transform-origin: right; }
+    45% { transform: scaleX(0); transform-origin: right; }
+    46% { transform: scaleX(0); transform-origin: left; }
+    100% { transform: scaleX(1); transform-origin: left; }
+}
+@media (min-width: 601px) and (hover: hover) and (pointer: fine) {
+    .text-link:hover, .work-home:hover .text-link { color: var(--ts-color-text, var(--text)); text-decoration: none; }
+    .text-link:hover::after, .work-home:hover .text-link::after { animation: text-link-sweep .5s cubic-bezier(.4,0,.2,1); }
+    .work-home:hover .work-home-arrow { transform: translate(2px, -2px); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .text-link, .work-home-arrow { transition: none; }
+    .text-link::after { animation: none !important; }
+    .work-home:hover .work-home-arrow { transform: none; }
+}

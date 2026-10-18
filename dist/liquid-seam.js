@@ -1,8 +1,17 @@
 class LiquidSeam
 {
     static duration = 1700;
-    static geometry(t, width, height)
+    static geometry(t, width, height, orientation = 'vertical')
     {
+        if (orientation === 'horizontal')
+        {
+            const geometry = this.geometry(t, height, width);
+            const swap = p => ({ x: p.y, y: p.x });
+            const edges = geometry.edges.map(edge => ({ ...edge, points: edge.points.map(swap) }));
+            const mask = [...edges[0].points, ...edges[1].points.slice().reverse()];
+            const path = mask.map((p, q) => (q ? 'L' : 'M') + p.x.toFixed(3) + ' ' + p.y.toFixed(3)).join(' ') + ' Z';
+            return { path, edges, pulse: geometry.pulse };
+        }
         t = Math.max(0, Math.min(1, t));
         const e = t*t*(3-2*t), pulse = Math.sin(t*Math.PI), left = [], right = [], edges = [];
         for (let q=0;q<=64;q++)

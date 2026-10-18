@@ -43,6 +43,11 @@ assert.equal(artwork.contourTime, 16, 'Time spent on About must not accumulate i
 assert.equal(lifeFrames.at(-1).time, 169960, 'Life bands must keep their independent timeline');
 artwork.resize();
 assert.equal(requests.at(-1), 16, 'Resizing on About must preserve the frozen contour phase');
+panel.dataset.view = 'work';
+const hiddenMeshes = requests.length;
+for (let q = 0; q < 3000; q++) artwork.render(170000 + q * 40, 40);
+assert.equal(requests.length, hiddenMeshes, 'Work must suspend the covered contours too');
+assert.equal(artwork.contourTime, 16, 'Time spent on Work must not cause a catch-up jump');
 panel.dataset.view = 'transition';
 const start = requests.length;
 for (let q = 0; q < 120; q++) artwork.render(180000 + q * 40, 40);

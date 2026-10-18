@@ -1,0 +1,6 @@
+Screenshots captured from the published SIDEQUEST website on 2026-10-18, 1280x720.
+home.jpg: https://timbuhtuk.github.io/sidequest/
+library.jpg: https://timbuhtuk.github.io/sidequest/#library
+tracker.jpg: https://timbuhtuk.github.io/sidequest/deus-ex (Now)
+map.jpg: https://timbuhtuk.github.io/sidequest/deus-ex (3D map, TF29 Headquarters, all floors, separated floors, labels hidden)
+The preview uses home.jpg as its full background and wordmark crop, with smaller library.jpg and map.jpg crops stacked in the left half. Its foreground layout is shared with the Between Two Worlds banner. No fabricated UI or progress data.

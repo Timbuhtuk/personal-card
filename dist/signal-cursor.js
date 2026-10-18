@@ -23,6 +23,7 @@ class SignalCursor
         document.addEventListener('pointercancel',()=>this.stop());
         document.addEventListener('keydown',event=>{if(event.key==='Tab')this.stop();});
         document.addEventListener('visibilitychange',()=>{if(document.hidden)this.stop();});
+        window.addEventListener('personal-cursor-reset',()=>this.stop());
         window.addEventListener('resize',()=>this.resize());this.fine.addEventListener('change',()=>this.stop());
         this.reduce.addEventListener('change',()=>{this.bursts=[];if(this.pointer.active)this.wake();});
         this.resize();

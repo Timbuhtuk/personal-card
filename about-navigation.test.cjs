@@ -1,25 +1,44 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
 const source=fs.readFileSync(path.join(__dirname,'dist/about.js'),'utf8').replace('new AboutNavigation();','');
 const LiquidSeam=require('./dist/liquid-seam.js');
-function fixture(hash='',canvas=true)
+function fixture(hash='',canvas=true,work=false)
 {
-    const events=()=>({callbacks:{},addEventListener(type,fn){(this.callbacks[type]||=[]).push(fn);},dispatch(type,event={}){for(const fn of this.callbacks[type]||[])fn(event);}});
+    const events=()=>({callbacks:{},addEventListener(type,fn){(this.callbacks[type]||=[]).push(fn);},removeEventListener(type,fn){this.callbacks[type]=(this.callbacks[type]||[]).filter(x=>x!==fn);},dispatch(type,event={}){for(const fn of this.callbacks[type]||[])fn(event);}});
     const frames=new Map();let now=100,id=0;
     const context=new Proxy({}, {get:(target,key)=>target[key]||((...args)=>{for(const value of args)if(typeof value==='number')assert.ok(Number.isFinite(value));}),set:(target,key,value)=>(target[key]=value,true)});
     const node=()=>Object.assign(events(),{style:{},dataset:{},hidden:false,inert:false,
-        getBoundingClientRect:()=>({x:0,y:64,width:1280,height:720}),focus(){this.focused=true;},append(){},setAttribute(){},getContext:()=>canvas?context:null});
+        getBoundingClientRect:()=>({x:0,y:64,width:1280,height:720}),focus(){this.focused=true;},append(){},setAttribute(name,value){this[name]=value;},removeAttribute(name){delete this[name];},getContext:()=>canvas?context:null});
     const classes=new Set(),root={classList:{add:(...names)=>names.forEach(n=>classes.add(n)),remove:(...names)=>names.forEach(n=>classes.delete(n)),contains:n=>classes.has(n)}};
     const selectors=new Map(['#imprint','.imprint-content','.imprint-copy','.about-link','#about','.about-back','#about-title'].map(name=>[name,node()]));
+    if(work)
+    {
+        for(const name of ['#work','.work-link','.work-frame'])selectors.set(name,node());
+        selectors.get('#work').hidden=true;
+        selectors.get('.work-link').href='http://localhost:6007/work-lab.html';
+        const frame=selectors.get('.work-frame');frame.dataset.src='work-lab.html?embedded=1';
+        frame.contentDocument={querySelector:()=>({}),fonts:{ready:Promise.resolve()}};
+        frame.contentWindow={postMessage(){}};
+    }
     selectors.get('#about').hidden=true;selectors.get('#imprint').dataset.view='home';
     const document=Object.assign(events(),{title:'Card',documentElement:root,hidden:false,querySelector:n=>selectors.get(n),createElement:()=>node()});
-    const location={pathname:'/',search:'',hash},pushes=[],history={pushState(a,b,url){pushes.push(url);location.hash=url.includes('#')?'#'+url.split('#')[1]:'';}};
+    const assigns=[],location={origin:'http://localhost:6007',pathname:'/',search:'',hash,assign(url){assigns.push(url);}} ,pushes=[],history={pushState(a,b,url){pushes.push(url);location.hash=url.includes('#')?'#'+url.split('#')[1]:'';}};
     const reducedMotion=Object.assign(events(),{matches:false}),window=Object.assign(events(),{devicePixelRatio:2});
     const artwork={name:{pointer:{active:true},motion:{settle(){}},render(){}}};
-    const sandbox={document,window,location,history,reducedMotion,artwork,LiquidSeam,requestAnimationFrame(fn){frames.set(++id,fn);return id;},cancelAnimationFrame(q){frames.delete(q);}};
+    const sandbox={document,window,location,history,reducedMotion,artwork,LiquidSeam,setTimeout,clearTimeout,requestAnimationFrame(fn){frames.set(++id,fn);return id;},cancelAnimationFrame(q){frames.delete(q);}};
     vm.createContext(sandbox);vm.runInContext(source+';this.Navigation=AboutNavigation;',sandbox);
     const navigation=new sandbox.Navigation();
-    async function flush(){for(let q=0;frames.size&&q<300;q++){now+=16;const current=[...frames];frames.clear();for(const [id,fn] of current)fn(now);await Promise.resolve();}await Promise.resolve();assert.equal(frames.size,0);}
-    return {navigation,selectors,document,window,location,pushes,reducedMotion,classes,frames,flush};
+    async function flush()
+    {
+        let idle=0;
+        for(let q=0;q<600&&idle<8;q++)
+        {
+            await Promise.resolve();
+            if(!frames.size){idle++;continue;}
+            idle=0;now+=16;const current=[...frames];frames.clear();for(const [id,fn] of current)fn(now);
+        }
+        assert.equal(frames.size,0);
+    }
+    return {navigation,selectors,document,window,location,pushes,assigns,reducedMotion,classes,frames,flush};
 }
 (async()=>{
     const f=fixture(),n=f.navigation;
@@ -36,5 +55,32 @@ function fixture(hash='',canvas=true)
     f.location.hash='';f.window.dispatch('hashchange');assert.equal(n.panel.dataset.view,'home');
     const direct=fixture('#about');assert.equal(direct.navigation.panel.dataset.view,'about');assert.equal(direct.pushes.length,0);
     const fallback=fixture('',false);await fallback.navigation.go('about');assert.equal(fallback.navigation.panel.dataset.view,'about');assert.equal(fallback.frames.size,0);
-    console.log('Liquid seam navigation passed: forward, exact reverse start, cancellation, resize, hidden tabs, reduced motion, browser history, direct About, focus and canvas fallback.');
+    const w=fixture('',true,true),work=w.navigation,frame=w.selectors.get('.work-frame');
+    const opening=work.go('work');assert.equal(work.pendingTarget,'work');assert.equal(frame.src,'work-lab.html?embedded=1');
+    frame.dispatch('load');await w.flush();await opening;
+    assert.equal(work.panel.dataset.view,'work');assert.equal(work.orientation,'horizontal');assert.equal(w.location.hash,'#work');
+    assert.equal(w.selectors.get('#work').inert,false);assert.equal(frame.focused,true);
+    const returning=work.go('home');
+    assert.equal(work.work.style.clipPath,`path("${LiquidSeam.geometry(1,1280,720,'horizontal').path}")`);
+    await w.flush();await returning;assert.equal(work.work.hidden,true);assert.equal(w.selectors.get('.work-link').focused,true);
+    const reopen=work.go('work');await w.flush();await reopen;
+    const before=w.pushes.length;
+    w.window.dispatch('message',{source:{},origin:w.location.origin,data:{type:'personal-work-navigation',target:'home'}});
+    assert.equal(work.panel.dataset.view,'work','Unrelated windows cannot change navigation');
+    w.window.dispatch('message',{source:frame.contentWindow,origin:'https://unrelated.example',data:{type:'personal-work-navigation',target:'home'}});
+    assert.equal(work.panel.dataset.view,'work','Cross-origin messages cannot change navigation');
+    w.window.dispatch('message',{source:frame.contentWindow,origin:w.location.origin,data:{type:'personal-work-navigation',target:'about'}});
+    await w.flush();assert.equal(work.panel.dataset.view,'about');assert.equal(w.pushes.length,before+1,'Cross-view transition adds only its destination');
+    w.reducedMotion.matches=true;w.location.hash='#work';w.window.dispatch('popstate');await w.flush();
+    assert.equal(work.panel.dataset.view,'work');assert.equal(w.pushes.length,before+1);
+    const pending=fixture('',true,true),pendingOpen=pending.navigation.go('work');
+    await pending.navigation.go('home',{animate:false});pending.selectors.get('.work-frame').dispatch('load');await pending.flush();await pendingOpen;
+    assert.equal(pending.navigation.panel.dataset.view,'home');assert.equal(pending.selectors.get('#work').hidden,true);
+    const directWork=fixture('#work',true,true);directWork.selectors.get('.work-frame').dispatch('load');await directWork.flush();
+    assert.equal(directWork.navigation.panel.dataset.view,'work');assert.equal(directWork.pushes.length,0);
+    const failed=fixture('',true,true),failedOpen=failed.navigation.go('work');failed.selectors.get('.work-frame').dispatch('error');await failedOpen;
+    assert.deepEqual(failed.assigns,['http://localhost:6007/work-lab.html']);
+    const workFallback=fixture('',false,true),fallbackOpen=workFallback.navigation.go('work');workFallback.selectors.get('.work-frame').dispatch('load');await workFallback.flush();await fallbackOpen;
+    assert.equal(workFallback.navigation.panel.dataset.view,'work');assert.equal(workFallback.frames.size,0);
+    console.log('Liquid seam navigation passed: vertical About, horizontal Work, exact reverses, cancellation and stale loads, resize, hidden tabs, reduced motion, browser history, direct routes, focus, trusted frame messages and load/canvas fallbacks.');
 })().catch(e=>{console.error(e);process.exitCode=1;});
