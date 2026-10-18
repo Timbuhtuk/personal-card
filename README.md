@@ -8,6 +8,8 @@ A personal link card with procedural contour figures, Game of Life bands and an 
 
 The page uses self-hosted Science Gothic and Cascadia Code fonts with Tessera design tokens. It has no external runtime dependencies or build step. Reduced motion keeps the name solid and pauses the artwork; animation also stops while the tab is hidden.
 
+The browser's `prefers-color-scheme` selects the existing dark Contrast palette or Tessera Storybook's warm Light palette. CSS selects the theme before the first paint, including without JavaScript. Changing the browser preference updates the artwork, Life colors, name textures, About icons and transition ink without reloading or reseeding the simulation. An active entrance or page transition settles safely when the theme changes. The pixel cursor and click rings invert against the surface underneath them to remain visible on either palette.
+
 One to three figures start at random positions, with curved pressure boundaries and 32 px contour spacing. Strokes are 1.3 px thick. The gap between neighboring figures follows the same 32 px spacing. Contours continue into the center instead of stopping at a fixed layer count. The logical scene is bounded to 1920 × 1080 and compensates for zooming out below one device pixel per CSS pixel. Its supersampled buffer stays within 16 million pixels and 8192 pixels per side, including at 25% browser zoom. Resize and pixel-density changes rebuild the scene. Geometry runs in a worker; each new mesh is drawn once. Supersampling smooths the strokes while the Life cells stay crisp. Hovering or clicking the name scatters its fragments, which return when the pointer leaves. A cached triangular wireframe remains in the original letter shapes beneath the moving fragments.
 
 The name, slogan and account links stay centered at every screen width. The buttons open [GitHub](https://github.com/Timbuhtuk), [LinkedIn](https://www.linkedin.com/in/tymofii-pankovskyi-2827bb331/) and [Telegram](https://t.me/timbuhtuk). On small screens the links wrap to keep the labels and logos readable. Button hover effects require a viewport wider than 600 px and a fine pointer that supports hover; keyboard focus remains visible on every device.
@@ -56,6 +58,7 @@ node logo-motion.test.cjs
 node about-navigation.test.cjs
 node liquid-seam.test.cjs
 node signal-cursor.test.cjs
+node theme.test.cjs
 node transition-motion.test.cjs
 node transition-lifecycle.test.cjs
 ```

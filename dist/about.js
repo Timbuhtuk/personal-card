@@ -27,6 +27,7 @@ class AboutNavigation
         window.addEventListener('popstate', route); window.addEventListener('hashchange', route);
         const settle = () => { if (this.running) this.go(this.target, { animate: false, history: false, force: true }); };
         window.addEventListener('resize', settle); reducedMotion.addEventListener('change', settle);
+        window.addEventListener('personal-theme-change', settle);
         document.addEventListener('visibilitychange', () => { if (document.hidden) settle(); });
         if (location.hash === '#about') this.go('about', { animate: false, history: false });
     }
@@ -45,7 +46,7 @@ class AboutNavigation
         c.clearRect(0,0,this.width,this.height);
         for(const edge of geometry.edges)
         {
-            c.strokeStyle=`rgba(241,241,241,${Math.max(0,edge.alpha*geometry.pulse)})`;c.lineWidth=edge.width;c.beginPath();
+            c.strokeStyle=`rgba(${window.PersonalTheme?.colors.inkRgb || '241,241,241'},${Math.max(0,edge.alpha*geometry.pulse)})`;c.lineWidth=edge.width;c.beginPath();
             edge.points.forEach((p,q)=>q?c.lineTo(p.x,p.y):c.moveTo(p.x,p.y));c.stroke();
         }
     }

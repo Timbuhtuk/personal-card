@@ -1,0 +1,31 @@
+/* Light palette from Tessera Storybook src/tokens.json. Dark keeps the existing Contrast theme. */
+:root {
+    color-scheme: dark;
+    --pc-line-rgb: 230,230,226;
+    --pc-ink-rgb: 241,241,241;
+    --pc-accent-rgb: 255,116,36;
+    --pc-logo-filter: invert(1) brightness(.82);
+}
+@media (prefers-color-scheme: light) {
+    :root {
+        color-scheme: light;
+        --ts-color-canvas: #E5E2D5;
+        --ts-color-raised: #EEEBE0;
+        --ts-color-panel: #D8D5C8;
+        --ts-color-thumbnail: #CFCCBF;
+        --ts-color-border: #AAA99B;
+        --ts-color-borderStrong: #74766D;
+        --ts-color-text: #383B35;
+        --ts-color-textSecondary: #50534C;
+        --ts-color-textMuted: #686B62;
+        --ts-color-hover: #C9C6B9;
+        --ts-color-pressed: #BBB8AB;
+        --ts-color-primary: #383B35;
+        --ts-color-primaryText: #EEEBE0;
+        --ts-color-accent: #383B35;
+        --pc-line-rgb: 56,59,53;
+        --pc-ink-rgb: 56,59,53;
+        --pc-accent-rgb: 56,59,53;
+        --pc-logo-filter: opacity(.78);
+    }
+}

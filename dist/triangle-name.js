@@ -254,7 +254,7 @@ class TriangleName
         }
         // Apply one tint after drawing so shared edges never become darker.
         wire.globalCompositeOperation = 'source-in';
-        wire.fillStyle = 'rgba(241,241,241,.5)';
+        wire.fillStyle = `rgba(${window.PersonalTheme?.colors.inkRgb || '241,241,241'},.5)`;
         wire.fillRect(0, 0, this.ink.width, this.ink.height);
         wire.globalCompositeOperation = 'source-over';
         this.motion = new TriangleMagnet(particles);

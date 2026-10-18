@@ -36,6 +36,7 @@ jobs:
           node about-navigation.test.cjs
           node liquid-seam.test.cjs
           node signal-cursor.test.cjs
+          node theme.test.cjs
           node transition-motion.test.cjs
           node transition-lifecycle.test.cjs
       - uses: actions/configure-pages@v5

@@ -8,7 +8,7 @@
 .about-intro { max-width: 560px; margin: 0 auto 34px; font-size: 13px; line-height: 1.85; color: var(--ts-color-textSecondary); text-wrap: pretty; }
 .about-technologies { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px 18px; margin: 0; padding: 0; list-style: none; }
 .about-technologies li { width: calc((100% - 108px) / 7); min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-.about-technologies img { display: block; flex: none; width: 40px; height: 40px; object-fit: contain; max-width: 100%; filter: invert(1) brightness(.82); }
+.about-technologies img { display: block; flex: none; width: 40px; height: 40px; object-fit: contain; max-width: 100%; filter: var(--pc-logo-filter, invert(1) brightness(.82)); }
 .about-technologies .about-logo--wide { width: 56px; }
 .about-technologies .about-logo--tall { width: 33px; }
 .about-technologies span { color: var(--ts-color-textMuted); font-size: 9px; line-height: 1.5; min-height: 27px; }

@@ -245,7 +245,7 @@ class ProceduralImprint extends Artwork
         {
             for (const path of frame.paths)
             {
-                context.strokeStyle = `rgba(230,230,226,${path.opacity})`;
+                context.strokeStyle = `rgba(${window.PersonalTheme?.colors.lineRgb || '230,230,226'},${path.opacity})`;
                 context.beginPath();
                 for (let q = path.offset; q < path.offset + path.length; q += 2)
                 {
@@ -255,7 +255,7 @@ class ProceduralImprint extends Artwork
                 if (path.closed) context.closePath();
                 context.stroke();
             }
-            context.fillStyle = '#ff7424';
+            context.fillStyle = `rgb(${window.PersonalTheme?.colors.accentRgb || '255,116,36'})`;
             context.fillRect(frame.center.x - 3, frame.center.y - 3, 6, 6);
         }
         this.canvas.dataset.contourThread = this.geometry.worker ? 'worker' : 'main';
@@ -306,6 +306,18 @@ async function initialize()
         }, { once: true });
     };
     watchPixelRatio();
+    window.addEventListener('personal-theme-change', () => {
+        for (const divider of artwork.dividers)
+        {
+            divider.backgroundColor = window.PersonalTheme.colors.background;
+            divider.cellColor = window.PersonalTheme.colors.cell;
+            divider.dirty = true;
+            divider.render(clock, 0);
+        }
+        artwork.drawnResult = null;
+        artwork.paint();
+        artwork.name.initialize();
+    });
     reducedMotion.addEventListener('change', event => {
         paused = event.matches;
         startAnimation();

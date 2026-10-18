@@ -59,9 +59,14 @@ class EntranceAnimation
         };
         this.onReducedMotion = () => { if (reducedMotion.matches) this.finish(); };
         window.addEventListener('resize', this.onResize);
+        window.addEventListener('personal-theme-change', this.onResize);
         document.addEventListener('visibilitychange', this.onVisibility);
         reducedMotion.addEventListener('change', this.onReducedMotion);
     }
+
+    get inkRgb() { return window.PersonalTheme?.colors.inkRgb || '241,241,241'; }
+    get lineRgb() { return window.PersonalTheme?.colors.lineRgb || '230,230,226'; }
+    get accentRgb() { return window.PersonalTheme?.colors.accentRgb || '255,116,36'; }
 
     static ready(timeout = 8000)
     {
@@ -290,6 +295,7 @@ class EntranceAnimation
     dispose()
     {
         window.removeEventListener('resize', this.onResize);
+        window.removeEventListener('personal-theme-change', this.onResize);
         document.removeEventListener('visibilitychange', this.onVisibility);
         reducedMotion.removeEventListener('change', this.onReducedMotion);
         for (const canvas of [this.fx, this.plot])
@@ -365,7 +371,7 @@ class EntranceAnimation
         this.art.style.opacity = this.artOpacity * EntranceMotion.smooth(time, 700, 1200);
         if (time > 690 && time < 1810)
         {
-            this.context.strokeStyle = `rgba(241,241,241,${.24 * (1 - wave)})`;
+            this.context.strokeStyle = `rgba(${this.inkRgb},${.24 * (1 - wave)})`;
             this.context.lineWidth = 1;
             this.context.beginPath();
             this.context.arc(this.center.x, this.center.y, radius, 0, Math.PI * 2);
@@ -388,7 +394,7 @@ class EntranceAnimation
         this.context.translate(this.center.x, this.center.y);
         this.context.scale(.35 + spring * .65, .8 + spring * .2);
         this.context.translate(-this.center.x, -this.center.y);
-        this.context.fillStyle = '#f1f1f1';
+        this.context.fillStyle = `rgb(${this.inkRgb})`;
         this.context.textBaseline = 'alphabetic';
         for (const letter of this.letters)
         {
@@ -418,7 +424,7 @@ class EntranceAnimation
         this.context.rect(this.nameLeft - 2, bounds.y - 24, (this.nameRight - this.nameLeft + 4) * trace, bounds.height + 48);
         this.context.clip();
         this.context.lineWidth = .85;
-        this.context.strokeStyle = `rgba(241,241,241,${1 - fill})`;
+        this.context.strokeStyle = `rgba(${this.inkRgb},${1 - fill})`;
         this.context.textBaseline = 'alphabetic';
         for (const letter of this.letters)
         {
@@ -430,7 +436,7 @@ class EntranceAnimation
         this.context.beginPath();
         this.context.rect(this.nameLeft - 2, bounds.y + bounds.height * (1 - fill) - 16, this.nameRight - this.nameLeft + 4, (bounds.height + 32) * fill);
         this.context.clip();
-        this.context.fillStyle = '#f1f1f1';
+        this.context.fillStyle = `rgb(${this.inkRgb})`;
         this.context.textBaseline = 'alphabetic';
         for (const letter of this.letters)
         {
@@ -467,10 +473,10 @@ class EntranceAnimation
         for (const line of this.lines)
         {
             const p = EntranceMotion.out(time, 950 + line.order * 420, 2100 + line.order * 400);
-            this.plotContext.strokeStyle = `rgba(230,230,226,${line.opacity})`;
+            this.plotContext.strokeStyle = `rgba(${this.lineRgb},${line.opacity})`;
             this.traceLine(this.plotContext, line.points, line.length * p);
         }
-        this.plotContext.fillStyle = `rgba(255,116,36,${EntranceMotion.smooth(time, 1900, 2400)})`;
+        this.plotContext.fillStyle = `rgba(${this.accentRgb},${EntranceMotion.smooth(time, 1900, 2400)})`;
         for (const frame of this.geometry.frames) this.plotContext.fillRect(frame.center.x - 3, frame.center.y - 3, 6, 6);
     }
 
@@ -493,13 +499,13 @@ class EntranceAnimation
                 { x: bounds.x + bounds.width, y: bounds.y + bounds.height, distance: bounds.width + bounds.height },
                 { x: bounds.x, y: bounds.y + bounds.height, distance: bounds.width * 2 + bounds.height },
                 { x: bounds.x, y: bounds.y, distance: (bounds.width + bounds.height) * 2 }];
-            this.context.strokeStyle = `rgba(241,241,241,${.5 * fade})`;
+            this.context.strokeStyle = `rgba(${this.inkRgb},${.5 * fade})`;
             this.context.lineWidth = 1;
             this.traceLine(this.context, points, (bounds.width + bounds.height) * 2 * p);
             link.style.opacity = EntranceMotion.smooth(time, 1590 + q * 110, 2130 + q * 110);
         });
         const connector = EntranceMotion.out(time, 850, 1400);
-        this.context.strokeStyle = `rgba(241,241,241,${.3 * (1 - EntranceMotion.smooth(time, 1600, 2250))})`;
+        this.context.strokeStyle = `rgba(${this.inkRgb},${.3 * (1 - EntranceMotion.smooth(time, 1600, 2250))})`;
         this.context.lineWidth = 1;
         for (const [element, side] of [[this.eyebrow, -1], [this.caption, 1]])
         {
@@ -556,7 +562,7 @@ class EntranceAnimation
         });
         const length = EntranceMotion.out(time, 0, 600) * EntranceMotion.mix(this.nameRight - this.nameLeft + 32, this.width, opening);
         const opacity = (1 - EntranceMotion.smooth(time, 1350, 1900)) * .7 * lineOpacity;
-        this.context.strokeStyle = `rgba(241,241,241,${opacity})`;
+        this.context.strokeStyle = `rgba(${this.inkRgb},${opacity})`;
         this.context.lineWidth = 1;
         this.context.beginPath();
         for (const y of time < 690 ? [this.center.y] : [top, bottom])

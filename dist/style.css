@@ -1,5 +1,4 @@
 * { box-sizing: border-box; -webkit-user-select: none; user-select: none; }
-:root { color-scheme: dark; }
 body { margin: 0; background: var(--ts-color-canvas); color: var(--ts-color-text); font-family: var(--ts-type-ui); font-size: 13px; }
 button, a { -webkit-tap-highlight-color: transparent; }
 button { font: inherit; color: inherit; cursor: pointer; }
