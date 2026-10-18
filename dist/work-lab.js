@@ -1,5 +1,5 @@
 (() => {
-    for (const project of ['tessera', 'sonar', 'btw', 'sidequest'])
+    for (const project of ['tessera', 'sonar', 'btw', 'sidequest', 'kvasir'])
     {
         const template = document.querySelector(`#${project}-preview-template`);
         document.querySelectorAll(`[data-${project}-mount]`).forEach(mount => {

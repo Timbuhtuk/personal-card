@@ -32,9 +32,22 @@ function fixture(hash='')
         requestAnimationFrame(fn){const id=++frameId;frames.set(id,fn);return id;},cancelAnimationFrame(id){frames.delete(id);}};
     vm.createContext(sandbox);vm.runInContext(motion+'\n'+source+'\nglobalThis.Preview=TransitionLab;',sandbox);
     const lab=new sandbox.Preview();
-    return {lab,nodes,events,reduced,document,frames,history,root,focused:()=>focused,drawCalls:()=>drawCalls};
+    return {lab,nodes,events,reduced,document,window,context,frames,history,root,focused:()=>focused,drawCalls:()=>drawCalls};
 }
 let samples=0;
+for (const mode of ['slash', 'portal', 'tear'])
+{
+    const f = fixture();
+    f.lab.choose(mode, false); f.lab.go('about');
+    f.nodes.get('#transition-seek').value = 500; f.nodes.get('#transition-seek').fire('input');
+    const scene = f.lab.scene, time = scene.time;
+    f.window.PersonalTheme = { colors: { inkRgb: '56,59,53' } };
+    f.events['window:personal-theme-change']();
+    assert.match(f.context.strokeStyle, /^rgba\(56,59,53,/);
+    assert.strictEqual(f.lab.scene, scene); assert.equal(scene.time, time); assert.equal(f.frames.size, 0);
+    f.window.PersonalTheme.colors.inkRgb = '241,241,241'; f.events['window:personal-theme-change']();
+    assert.match(f.context.strokeStyle, /^rgba\(241,241,241,/);
+}
 for(const mode of Object.keys(new Function(motion+';return TransitionMotion.variants')()))
 {
     const f=fixture(),lab=f.lab;

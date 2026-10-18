@@ -49,4 +49,15 @@ assert.strictEqual(divider.cells, cells);
 assert.equal(window.PersonalTheme.colors.inkRgb, '241,241,241');
 assert.equal(names, 2);
 assert.match(read('theme.css'), /@media\s*\(prefers-color-scheme:\s*light\)/);
+for (const page of ['index.html', 'work-lab.html', 'cursor-lab.html', 'entrance-lab.html', 'transition-lab.html', 'tessera-card-pier.html'])
+{
+    const html = read(page);
+    assert.match(html, /href="theme\.css"/, `${page} must follow the browser color preference`);
+    assert.match(html, /href="assets\/styles\/tokens\.css"/, `${page} must use the shared palette`);
+    if (page !== 'tessera-card-pier.html')
+    {
+        assert.match(html, /src="theme\.js"/, `${page} must refresh artwork when the preference changes`);
+        assert.ok(html.indexOf('src="theme.js"') < html.indexOf('src="' + (page === 'work-lab.html' ? 'work-lab.js' : 'app.js') + '"'), `${page} must initialize theme colors before artwork`);
+    }
+}
 console.log('Theme passed: initial palette, live light/dark changes, canvas repaint and intact Life state.');

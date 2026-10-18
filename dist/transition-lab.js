@@ -58,6 +58,9 @@ class TransitionLab
         const route = () => this.go(location.hash === '#about' ? 'about' : 'home', { history: false });
         window.addEventListener('popstate', route); window.addEventListener('hashchange', route);
         window.addEventListener('resize', () => { this.settle(this.scene?.target || this.view, false); this.measure(); });
+        window.addEventListener('personal-theme-change', () => {
+            if (this.scene) this.draw(this.scene.time / this.scene.duration);
+        });
         reducedMotion.addEventListener('change', () => { if (this.scene) this.settle(this.scene.target, false); this.update(); });
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) { this.resume = this.playing; this.playing = false; cancelAnimationFrame(this.frame); }
@@ -156,7 +159,7 @@ class TransitionLab
         {
             const x=-h+(w+h)*e;
             this.in.style.clipPath=`polygon(0 0,${x+h}px 0,${x}px 100%,0 100%)`;
-            c.strokeStyle=`rgba(241,241,241,${Math.sin(t*Math.PI)*.8})`;c.lineWidth=2;
+            c.strokeStyle=`rgba(${window.PersonalTheme?.colors.inkRgb || '241,241,241'},${Math.sin(t*Math.PI)*.8})`;c.lineWidth=2;
             c.beginPath();c.moveTo(x+h,0);c.lineTo(x,h);c.stroke();
             this.out.style.transform=`translateX(${-direction*e*25}px)`;
         }
@@ -169,7 +172,7 @@ class TransitionLab
             this.in.style.transform=`scale(${1.08-.08*e})`;
             for(let q=0;q<8;q++)
             {
-                c.strokeStyle=`rgba(241,241,241,${Math.sin(t*Math.PI)*(.65-q*.065)})`;c.lineWidth=.8;c.beginPath();
+                c.strokeStyle=`rgba(${window.PersonalTheme?.colors.inkRgb || '241,241,241'},${Math.sin(t*Math.PI)*(.65-q*.065)})`;c.lineWidth=.8;c.beginPath();
                 for(let k=0;k<=96;k++){const a=k/96*Math.PI*2,r=radius+q*8+Math.sin(a*5+t*8+q*.12)*22*Math.sin(t*Math.PI);const x=center.x+Math.cos(a)*r,y=center.y+Math.sin(a)*r;k?c.lineTo(x,y):c.moveTo(x,y);}
                 c.stroke();
             }
@@ -182,7 +185,7 @@ class TransitionLab
             masked.style.clipPath=`path("${geometry.masks.map(points=>M.polygon(points)).join(' ')}")`;
             for(const edge of geometry.edges)
             {
-                c.strokeStyle=`rgba(241,241,241,${M.clamp(edge.alpha*geometry.pulse)})`;c.lineWidth=edge.width;c.beginPath();
+                c.strokeStyle=`rgba(${window.PersonalTheme?.colors.inkRgb || '241,241,241'},${M.clamp(edge.alpha*geometry.pulse)})`;c.lineWidth=edge.width;c.beginPath();
                 edge.points.forEach((p,q)=>q?c.lineTo(p.x,p.y):c.moveTo(p.x,p.y));c.stroke();
             }
         }

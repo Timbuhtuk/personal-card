@@ -3,14 +3,18 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#0c0c0c">
+    <meta name="theme-color" content="#0c0c0c" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#E5E2D5" media="(prefers-color-scheme: light)">
     <meta name="description" content="Selected software projects by Timbuhtuk — an interactive work index.">
     <title>Selected work — Timbuhtuk</title>
     <link rel="preload" href="assets/fonts/science-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="assets/styles/fonts.css">
+    <link rel="stylesheet" href="assets/styles/tokens.css">
     <link rel="stylesheet" href="work-lab.css">
     <link rel="stylesheet" href="text-links.css">
     <link rel="stylesheet" href="signal-cursor.css">
+    <link rel="stylesheet" href="theme.css">
+    <script src="theme.js" defer></script>
     <script src="work-lab.js" defer></script>
     <script src="signal-cursor.js" defer></script>
 </head>
@@ -18,7 +22,6 @@
     <main id="work">
         <section class="work-intro" aria-labelledby="work-title">
             <div class="intro-copy"><h1 id="work-title">What I’ve built</h1></div>
-            <a class="work-home" href="./" target="_top"><span class="work-home-label text-link">Home</span><span class="work-home-arrow" aria-hidden="true">↗</span></a>
         </section>
         <ol class="project-list" aria-label="Selected projects">
             <li><a class="project" href="https://github.com/Timbuhtuk/TESSERA" target="_blank" rel="noopener noreferrer" data-project="tessera" aria-label="Tessera — pixel art tools. Open GitHub in a new tab.">
@@ -39,9 +42,12 @@
             </a></li>
             <li><a class="project" href="https://github.com/Timbuhtuk/Kvasir" target="_blank" rel="noopener noreferrer" data-project="kvasir" aria-label="Kvasir — Discord music bot. Open GitHub in a new tab.">
                 <span class="project-number">05</span><div class="project-name"><h2>Kvasir</h2></div><span class="project-stack" role="img" aria-label="C# / .NET / SQLite" title="C# / .NET / SQLite"><img src="assets/technology-logos/svg/csharp.svg" alt="" title="C#" width="26" height="26" draggable="false"><img src="assets/technology-logos/svg/dotnet.svg" alt="" title=".NET" width="26" height="26" draggable="false"></span><span class="project-arrow" aria-hidden="true">↗</span>
-                <img class="inline-preview" src="assets/work/kvasir.svg" alt="Illustrated music bot queue and playback controls" width="720" height="480" draggable="false">
+                <div class="inline-preview kvasir-inline" data-kvasir-mount role="img" aria-label="Kvasir: a black turntable with a green iris vinyl record on a dark table"><img class="kvasir-fallback" src="assets/work/kvasir/iris-turntable-detail-banner.webp" alt="Kvasir iris vinyl turntable" width="1200" height="800" draggable="false"></div>
             </a></li>
         </ol>
+        <nav class="work-navigation" aria-label="Page navigation">
+            <a class="work-home" href="./" target="_top"><span class="work-home-label text-link">Home</span><span class="work-home-arrow" aria-hidden="true">↗</span></a>
+        </nav>
     </main>
     <aside class="project-preview" aria-hidden="true">
         <div class="preview-art">
@@ -49,9 +55,16 @@
             <div data-image="sonar" class="preview-scene" data-sonar-mount><img class="sonar-fallback" src="assets/work/sonar/brand.png" alt="" width="785" height="438" draggable="false"></div>
             <div data-image="btw" class="preview-scene" data-btw-mount><img class="btw-fallback" src="assets/work/btw/gameplay.png" alt="" width="1920" height="1080" draggable="false"></div>
             <div data-image="sidequest" class="preview-scene" data-sidequest-mount><img class="sidequest-fallback" src="assets/work/sidequest/home.jpg" alt="" width="1280" height="720" draggable="false"></div>
-            <img data-image="kvasir" src="assets/work/kvasir.svg" alt="" width="720" height="480" draggable="false">
+            <div data-image="kvasir" class="preview-scene" data-kvasir-mount><img class="kvasir-fallback" src="assets/work/kvasir/iris-turntable-detail-banner.webp" alt="" width="1200" height="800" draggable="false"></div>
         </div>
     </aside>
+    <template id="kvasir-preview-template">
+        <div class="kvasir-scene">
+            <img class="kvasir-artwork" src="assets/work/kvasir/iris-turntable-detail-banner.webp" alt="" width="1200" height="800" draggable="false">
+            <div class="kvasir-shade" aria-hidden="true"></div>
+            <div class="kvasir-wordmark">KVASIR</div>
+        </div>
+    </template>
     <template id="tessera-preview-template">
         <div class="tessera-scene">
             <div class="tessera-artwork">

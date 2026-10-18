@@ -27,5 +27,30 @@
         --pc-ink-rgb: 56,59,53;
         --pc-accent-rgb: 56,59,53;
         --pc-logo-filter: opacity(.78);
+        --canvas: var(--ts-color-canvas);
+        --text: var(--ts-color-text);
+        --secondary: var(--ts-color-textMuted);
+        --border: var(--ts-color-border);
+        --work-muted: var(--ts-color-textMuted);
+        --work-list-border: var(--ts-color-borderStrong);
+        --work-preview-border: var(--ts-color-borderStrong);
+        --work-preview-shadow: 0 20px 70px #383b3530;
     }
+    .cursor-controls, .transition-controls, .entrance-controls { background: var(--ts-color-raised); border-color: var(--ts-color-border); }
+    .cursor-heading a, .cursor-toggle, .cursor-caption p,
+    .transition-heading nav, .transition-description, .transition-time, .transition-status { color: var(--ts-color-textSecondary); }
+    .cursor-choices button, .cursor-toggle, .transition-variants button, .transition-actions button { border-color: var(--ts-color-border); }
+    .cursor-choices button span, .cursor-note, .transition-variants button small,
+    .transition-variants button span, .transition-timeline label { color: var(--ts-color-textMuted); }
+    .cursor-choices button[aria-pressed="true"], .transition-variants button[aria-pressed="true"],
+    .entrance-variants button[aria-pressed="true"] { background: var(--ts-color-panel); border-color: var(--ts-color-borderStrong); }
+    .cursor-choices button[aria-pressed="true"] span, .transition-variants button[aria-pressed="true"] span { color: var(--ts-color-accent); }
+    .transition-actions button:first-child, .transition-actions button[aria-pressed="true"] { border-color: var(--ts-color-borderStrong); }
+    .transition-timeline input { accent-color: var(--ts-color-text); }
+    .technology-icon { filter: var(--pc-logo-filter); }
+    .saved-nav { color: var(--ts-color-textMuted); }
+    .saved-card { border-color: var(--ts-color-border); }
+}
+@media (prefers-color-scheme: light) and (hover: hover) and (pointer: fine) {
+    .cursor-controls button:hover, .transition-controls button:hover { border-color: var(--ts-color-textSecondary); }
 }
