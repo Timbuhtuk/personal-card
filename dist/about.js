@@ -10,6 +10,10 @@ class AboutNavigation
         this.about = document.querySelector('#about');
         this.back = document.querySelector('.about-back');
         this.heading = document.querySelector('#about-title');
+        this.aboutFrame = document.querySelector('.about-frame');
+        this.recordPreview = /[?&]recordPreview=1(?:&|$)/.test(location.search);
+        this.recordEntrance = this.recordPreview ? location.search.match(/[?&]recordEntrance=(cue|spin|roll|trace|camera|scan)(?:&|$)/)?.[1] || 'cue' : 'cue';
+        this.transitionDuration = this.recordPreview && /[?&]recordSlow=1(?:&|$)/.test(location.search) ? LiquidSeam.duration * 2 : LiquidSeam.duration;
         this.workLink = document.querySelector('.work-link');
         this.work = document.querySelector('#work');
         this.workFrame = document.querySelector('.work-frame');
@@ -27,6 +31,12 @@ class AboutNavigation
         };
         this.link.addEventListener('click', event => activate(event, 'about'));
         this.back.addEventListener('click', event => activate(event, 'home'));
+        if (this.aboutFrame)
+        {
+            this.link.addEventListener('pointerenter', () => this.prepareAbout().catch(() => {}), { once: true });
+            this.link.addEventListener('focus', () => this.prepareAbout().catch(() => {}), { once: true });
+            this.aboutFrame.addEventListener('pointerenter', () => window.dispatchEvent(new Event('personal-cursor-reset')));
+        }
         if (this.work && this.workFrame && this.workLink)
         {
             this.workLink.addEventListener('click', event => activate(event, 'work'));
@@ -45,7 +55,7 @@ class AboutNavigation
         window.addEventListener('resize', settle); reducedMotion.addEventListener('change', settle);
         window.addEventListener('personal-theme-change', settle);
         document.addEventListener('visibilitychange', () => { if (document.hidden) settle(); });
-        if (location.hash === '#about' || (this.work && location.hash === '#work')) this.go(location.hash.slice(1), { animate: false, history: false });
+        if (location.hash === '#about' || (this.work && location.hash === '#work')) this.go(location.hash.slice(1), { animate: !!this.aboutFrame && this.recordPreview, history: false });
     }
     prepareWork()
     {
@@ -80,6 +90,40 @@ class AboutNavigation
         });
         return this.workReady;
     }
+    prepareAbout()
+    {
+        if (!this.aboutFrame) return Promise.resolve();
+        if (this.aboutReady) return this.aboutReady;
+        this.aboutReady = new Promise((resolve, reject) => {
+            let timer;
+            const finish = error => {
+                clearTimeout(timer);
+                this.aboutFrame.removeEventListener('load', loaded);
+                this.aboutFrame.removeEventListener('error', failed);
+                if (error) { this.aboutReady = null; reject(error); }
+                else { this.notifyAbout('hidden'); resolve(); }
+            };
+            const failed = () => finish(new Error('About record could not be loaded.'));
+            const loaded = () => {
+                try
+                {
+                    const content = this.aboutFrame.contentDocument;
+                    if (!content?.querySelector('#record-scene')) { failed(); return; }
+                    Promise.resolve(this.aboutFrame.contentWindow.RecordStudyReady || content.fonts?.ready).then(() => finish(), failed);
+                }
+                catch { failed(); }
+            };
+            this.aboutFrame.addEventListener('load', loaded);
+            this.aboutFrame.addEventListener('error', failed);
+            timer = setTimeout(failed, 10000);
+            this.aboutFrame.src = this.aboutFrame.dataset.src + '&entrance=' + this.recordEntrance;
+        });
+        return this.aboutReady;
+    }
+    notifyAbout(phase, animate = false)
+    {
+        this.aboutFrame?.contentWindow?.postMessage({ type: 'personal-record-transition', phase, animate, duration: this.transitionDuration }, location.origin);
+    }
     notifyWork(visible)
     {
         this.workFrame?.contentWindow?.postMessage({ type: 'personal-work-visibility', visible }, location.origin);
@@ -109,7 +153,7 @@ class AboutNavigation
             this.complete = resolve; let time = 0, previous = 0;
             const tick = now => {
                 time += previous ? now - previous : 0; previous = now;
-                const t = Math.min(1, time / LiquidSeam.duration); this.draw(target === 'home' ? 1 - t : t);
+                const t = Math.min(1, time / this.transitionDuration); this.draw(target === 'home' ? 1 - t : t);
                 if (t < 1) this.frame = requestAnimationFrame(tick);
                 else { this.complete = null; resolve(); }
             };
@@ -134,6 +178,20 @@ class AboutNavigation
             return;
         }
         const version = ++this.version; this.cancel(); this.pendingTarget = target; this.running = true;
+        if (target === 'about' && this.aboutFrame)
+        {
+            this.link.setAttribute('aria-busy', 'true');
+            try { await this.prepareAbout(); }
+            catch
+            {
+                this.link.removeAttribute('aria-busy');
+                if (version !== this.version) return;
+                this.pendingTarget = null; this.running = false; this.about.hidden = true;
+                location.assign('record-lab.html?variant=graphic&copy=labels'); return;
+            }
+            this.link.removeAttribute('aria-busy');
+            if (version !== this.version) return;
+        }
         if (target === 'work')
         {
             this.workLink.setAttribute('aria-busy', 'true');
@@ -163,6 +221,7 @@ class AboutNavigation
         if (artwork?.name) { artwork.name.pointer.active = false; artwork.name.motion?.settle(); artwork.name.render(0, false); }
         if (target !== 'home') this.layer.scrollTop = 0;
         this.measure(); this.draw(target === 'home' ? 1 : 0);
+        this.notifyAbout(target === 'about' ? 'enter' : from === 'about' ? 'leave' : 'hidden', animate && from !== target && !reducedMotion.matches);
         if (animate && from !== target && !reducedMotion.matches && this.context)
         {
             await this.play(target); if (version !== this.version) return;
@@ -170,7 +229,7 @@ class AboutNavigation
         this.cancel(); this.layer.style.clipPath = 'none';
         if (target === 'about')
         {
-            this.root.classList.add('is-about'); this.panel.dataset.view = 'about'; this.about.inert = false; this.heading.focus({ preventScroll: true });
+            this.root.classList.add('is-about'); this.panel.dataset.view = 'about'; this.about.inert = false; (this.aboutFrame || this.heading).focus({ preventScroll: true });
         }
         else if (target === 'work')
         {
@@ -183,6 +242,7 @@ class AboutNavigation
             (view === 'work' ? this.workLink : this.link).focus({ preventScroll: true });
         }
         this.root.classList.remove('about-transitioning');
+        this.notifyAbout(target === 'about' ? 'visible' : 'hidden');
         document.title = target === 'about' ? 'Timbuhtuk — About' : target === 'work' ? 'Timbuhtuk — Selected work' : this.homeTitle;
         this.running = false;
     }

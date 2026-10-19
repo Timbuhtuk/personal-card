@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#101010">
+    <title>Record carousel studies — Timbuhtuk</title>
+    <link rel="preload" href="assets/fonts/science-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="assets/styles/fonts.css">
+    <link rel="stylesheet" href="record-lab.css">
+    <script src="record-entrance-motion.js" defer></script>
+    <script src="record-lab.js" defer></script>
+</head>
+<body data-variant="minimal">
+    <header class="study-controls">
+        <span class="study-name">RECORD / STUDIES</span>
+        <nav aria-label="Visual treatment" class="variants">
+            <button type="button" data-variant="minimal" aria-pressed="true"><small>01</small> Minimal</button>
+            <button type="button" data-variant="graphic" aria-pressed="false"><small>02</small> Graphic</button>
+            <button type="button" data-variant="wireframe" aria-pressed="false"><small>03</small> Wireframe</button>
+            <button type="button" data-variant="studio" aria-pressed="false"><small>04</small> Studio</button>
+            <button type="button" data-variant="macro" aria-pressed="false"><small>05</small> Macro</button>
+            <button type="button" data-variant="blend" aria-pressed="false"><small>06</small> Blend</button>
+        </nav>
+    </header>
+    <main class="record-stage" aria-label="Oversized vinyl text carousel">
+        <svg id="record-scene" role="group" aria-label="Text printed on the rotating outer part of a vinyl record">
+            <defs>
+                <radialGradient id="vinyl"><stop stop-color="#202224"/><stop offset=".5" stop-color="#131516"/><stop offset=".9" stop-color="#080a0b"/><stop offset="1" stop-color="#181b1d"/></radialGradient>
+                <linearGradient id="deck-finish" x2=".9" y2="1"><stop stop-color="#3a3c3d"/><stop offset=".45" stop-color="#252728"/><stop offset="1" stop-color="#161819"/></linearGradient>
+                <linearGradient id="chrome" x2="1" y2="0"><stop stop-color="#12171b"/><stop offset=".22" stop-color="#7f888c"/><stop offset=".39" stop-color="#eef0ed"/><stop offset=".57" stop-color="#a2aaad"/><stop offset=".8" stop-color="#353e42"/><stop offset="1" stop-color="#141b1e"/></linearGradient>
+                <linearGradient id="dark-metal" x2=".8" y2="1"><stop stop-color="#5a5f61"/><stop offset=".05" stop-color="#292e31"/><stop offset="1" stop-color="#080d10"/></linearGradient>
+                <radialGradient id="screw" cx=".3" cy=".25"><stop stop-color="#f4f4ef"/><stop offset=".4" stop-color="#8e979a"/><stop offset=".68" stop-color="#d1d6d5"/><stop offset="1" stop-color="#414a4e"/></radialGradient>
+                <linearGradient id="record-reflection" x2="1" y2="1"><stop stop-color="#fff" stop-opacity="0"/><stop offset=".36" stop-color="#fff" stop-opacity=".02"/><stop offset=".47" stop-color="#fff" stop-opacity=".13"/><stop offset=".53" stop-color="#fff" stop-opacity=".02"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+                <filter id="surface-noise"><feTurbulence type="fractalNoise" baseFrequency=".72" numOctaves="2" seed="11"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope=".1"/></feComponentTransfer><feComposite in2="SourceGraphic" operator="in"/></filter>
+                <filter id="soft-shadow" x="-.5" y="-.5" width="2" height="2"><feDropShadow dx="7" dy="12" stdDeviation="7" flood-color="#000" flood-opacity=".65"/></filter>
+                <clipPath id="disc-mask"><circle id="clip-circle"/></clipPath>
+                <clipPath id="center-iris-clip"><circle r="100"/></clipPath>
+                <clipPath id="record-arrival-clip"><rect id="record-arrival-window"/></clipPath>
+                <g id="center-iris-pattern"></g>
+            </defs>
+            <g id="deck-layer" aria-hidden="true"></g>
+            <g id="record-arrival"><g id="record-rotor">
+                <g id="disc-surface" aria-hidden="true"></g>
+                <g id="printed-sections"></g>
+            </g></g>
+            <g id="reflection-layer" aria-hidden="true" pointer-events="none" clip-path="url(#disc-mask)"></g>
+            <g id="hardware-layer" aria-hidden="true" pointer-events="none"></g>
+            <path id="record-scan-line" fill="none" stroke="#d9e0d3" stroke-width="1" opacity="0" pointer-events="none" aria-hidden="true"/>
+        </svg>
+        <div class="gesture-hint" aria-hidden="true">Drag to turn</div>
+        <button type="button" class="center-detail" aria-pressed="false" hidden>Center detail ↗</button>
+        <nav class="track-controls" aria-label="Record sections">
+            <button type="button" class="step-button" data-step="-1" aria-label="Previous section">←</button>
+            <div class="section-keys">
+                <button type="button" data-section="0" aria-label="Who I Am?" aria-pressed="true">01</button>
+                <button type="button" data-section="1" aria-label="What I Build?" aria-pressed="false">02</button>
+                <button type="button" data-section="2" aria-label="How I Think?" aria-pressed="false">03</button>
+            </div>
+            <button type="button" class="step-button" data-step="1" aria-label="Next section">→</button>
+        </nav>
+        <span class="sr-only" id="record-announcement" aria-live="polite"></span>
+    </main>
+</body>
+</html>

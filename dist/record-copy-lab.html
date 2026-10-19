@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Record typography studies — Timbuhtuk</title>
+    <link rel="stylesheet" href="assets/styles/fonts.css">
+    <link rel="stylesheet" href="record-entrance-lab.css">
+    <style>@media (max-width: 650px) { nav { grid-template-columns: repeat(2, 1fr); } }</style>
+    <script src="record-copy-lab.js" defer></script>
+</head>
+<body>
+    <header class="entrance-studies">
+        <div class="study-top"><span>RECORD / TYPOGRAPHY</span></div>
+        <nav aria-label="Record typography">
+            <button type="button" data-copy="labels" aria-pressed="true"><small>01</small> Small labels only</button>
+            <button type="button" data-copy="titles" aria-pressed="false"><small>02</small> Large titles only</button>
+        </nav>
+        <p id="study-description" aria-live="polite"></p>
+    </header>
+    <main><iframe id="site-preview" title="Record typography preview"></iframe></main>
+</body>
+</html>

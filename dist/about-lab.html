@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#101010" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#E5E2D5" media="(prefers-color-scheme: light)">
+    <title>About studies — Timbuhtuk</title>
+    <link rel="preload" href="assets/fonts/science-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="assets/styles/fonts.css">
+    <link rel="stylesheet" href="assets/styles/tokens.css">
+    <link rel="stylesheet" href="about-lab.css">
+    <link rel="stylesheet" href="text-links.css">
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="signal-cursor.css">
+    <script src="theme.js" defer></script>
+    <script src="contour-field.js" defer></script>
+    <script src="contour-scheduler.js" defer></script>
+    <script src="about-lab.js" defer></script>
+    <script src="signal-cursor.js" defer></script>
+</head>
+<body>
+    <header class="study-controls">
+        <span class="study-label">ABOUT / STUDIES</span>
+        <nav class="study-choices" aria-label="About layout">
+            <button type="button" data-variant="editorial" aria-pressed="true" aria-controls="editorial"><span>01</span> Editorial</button>
+            <button type="button" data-variant="statement" aria-pressed="false" aria-controls="statement"><span>02</span> Statement</button>
+            <button type="button" data-variant="living" aria-pressed="false" aria-controls="living"><span>03</span> Living system</button>
+        </nav>
+        <a class="study-close" href="./#about" aria-label="Back to the current About page">Current About ↗</a>
+    </header>
+    <div class="life-band" aria-hidden="true"><canvas></canvas></div>
+    <main class="study-stage">
+        <section class="study-panel editorial" id="editorial" aria-labelledby="editorial-title">
+            <div class="editorial-grid">
+                <div class="editorial-heading">
+                    <p class="kicker">THE PERSON BEHIND THE PROJECTS</p>
+                    <h1 id="editorial-title">A little<br>about me.</h1>
+                    <span class="editorial-signature">Tymofii Pankovskyi <span>↗</span></span>
+                </div>
+                <div class="editorial-copy">
+                    <h2>Hi, I'm Tymofii.</h2>
+                    <p class="lead">I build applications, tools<br class="desktop-break"> and worlds.</p>
+                    <p>From pixel art tools to music platforms and procedural game systems, I enjoy taking an idea apart and making its pieces work together.</p>
+                    <p>I like building things I want to use — and making complicated systems feel straightforward.</p>
+                    <div class="editorial-fields"><span>Desktop software</span><span>Backend systems</span><span>Game development</span></div>
+                </div>
+            </div>
+            <div class="editorial-toolbox">
+                <span class="toolbox-label">A FEW TOOLS I WORK WITH</span>
+                <ul class="tech-strip" data-tech-strip aria-label="Technologies"></ul>
+            </div>
+        </section>
+        <section class="study-panel statement" id="statement" aria-labelledby="statement-title" hidden>
+            <p class="kicker">TYMOFII PANKOVSKYI · SOFTWARE DEVELOPER</p>
+            <h1 id="statement-title">I build things<br>I want to use.</h1>
+            <p class="statement-intro">Applications, tools and procedural worlds.<br>A good reason to build. A lot of details to get right.</p>
+            <p class="project-words">From <button type="button" class="text-link" data-peek="tools" aria-expanded="false" aria-controls="project-peek">tools</button> to <button type="button" class="text-link" data-peek="systems" aria-expanded="false" aria-controls="project-peek">systems</button> to <button type="button" class="text-link" data-peek="worlds" aria-expanded="false" aria-controls="project-peek">worlds</button>.</p>
+            <ul class="tech-strip statement-tools" data-tech-strip aria-label="Technologies"></ul>
+        </section>
+        <section class="study-panel living" id="living" aria-labelledby="living-title" hidden>
+            <div class="living-copy">
+                <p class="kicker">A LITTLE ABOUT ME</p>
+                <h1 id="living-title">Different tools.<br>One way<br>of thinking.</h1>
+                <p class="living-name">I'm Tymofii Pankovskyi.</p>
+                <p>I build applications, tools and game systems. Different projects, connected by the same curiosity about how things work.</p>
+                <p>From pixel art to procedural worlds, I like making complicated pieces work together.</p>
+            </div>
+            <div class="living-system">
+                <div class="system-orbit" aria-label="Explore the technologies">
+                    <canvas class="system-canvas" aria-hidden="true"></canvas>
+                    <svg class="system-connection" viewBox="0 0 100 100" aria-hidden="true"><line x1="50" y1="50" x2="50" y2="50"/></svg>
+                    <div class="system-core" aria-hidden="true"><span>t.</span></div>
+                    <div class="system-nodes"></div>
+                </div>
+                <p class="system-caption" aria-live="polite"><strong>One connected system.</strong><span>Explore a technology.</span></p>
+            </div>
+        </section>
+        <aside class="project-peek" id="project-peek" aria-label="Project preview" hidden>
+            <img src="assets/work/tessera/mural-pixel.png" alt="" width="600" height="400" draggable="false">
+            <span></span>
+        </aside>
+    </main>
+    <footer class="study-footer">
+        <span class="study-description">01 / An editorial introduction.</span>
+        <nav aria-label="Page links">
+            <a href="./#work"><span class="text-link">Work</span> ↗</a>
+            <a href="https://t.me/timbuhtuk" target="_blank" rel="noopener noreferrer"><span class="text-link">Say hello</span> ↗</a>
+            <a href="./"><span class="text-link">Home</span> ↗</a>
+        </nav>
+    </footer>
+    <div class="life-band" aria-hidden="true"><canvas></canvas></div>
+</body>
+</html>

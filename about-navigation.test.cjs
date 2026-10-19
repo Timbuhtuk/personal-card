@@ -1,7 +1,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
 const source=fs.readFileSync(path.join(__dirname,'dist/about.js'),'utf8').replace('new AboutNavigation();','');
 const LiquidSeam=require('./dist/liquid-seam.js');
-function fixture(hash='',canvas=true,work=false)
+function fixture(hash='',canvas=true,work=false,record=false,search='')
 {
     const events=()=>({callbacks:{},addEventListener(type,fn){(this.callbacks[type]||=[]).push(fn);},removeEventListener(type,fn){this.callbacks[type]=(this.callbacks[type]||[]).filter(x=>x!==fn);},dispatch(type,event={}){for(const fn of this.callbacks[type]||[])fn(event);}});
     const frames=new Map();let now=100,id=0;
@@ -19,9 +19,17 @@ function fixture(hash='',canvas=true,work=false)
         frame.contentDocument={querySelector:()=>({}),fonts:{ready:Promise.resolve()}};
         frame.contentWindow={postMessage(){}};
     }
+    const recordMessages=[];
+    if(record)
+    {
+        const frame=node();frame.dataset.src='record-lab.html?variant=graphic&embedded=1&copy=labels';
+        frame.contentDocument={querySelector:()=>({}),fonts:{ready:Promise.resolve()}};
+        frame.contentWindow={RecordStudyReady:Promise.resolve(),postMessage(message,origin){recordMessages.push({message,origin});}};
+        selectors.set('.about-frame',frame);
+    }
     selectors.get('#about').hidden=true;selectors.get('#imprint').dataset.view='home';
     const document=Object.assign(events(),{title:'Card',documentElement:root,hidden:false,querySelector:n=>selectors.get(n),createElement:()=>node()});
-    const assigns=[],location={origin:'http://localhost:6007',pathname:'/',search:'',hash,assign(url){assigns.push(url);}} ,pushes=[],history={pushState(a,b,url){pushes.push(url);location.hash=url.includes('#')?'#'+url.split('#')[1]:'';}};
+    const assigns=[],location={origin:'http://localhost:6007',pathname:'/',search,hash,assign(url){assigns.push(url);}} ,pushes=[],history={pushState(a,b,url){pushes.push(url);location.hash=url.includes('#')?'#'+url.split('#')[1]:'';}};
     const reducedMotion=Object.assign(events(),{matches:false}),window=Object.assign(events(),{devicePixelRatio:2});
     const artwork={name:{pointer:{active:true},motion:{settle(){}},render(){}}};
     const sandbox={document,window,location,history,reducedMotion,artwork,LiquidSeam,setTimeout,clearTimeout,requestAnimationFrame(fn){frames.set(++id,fn);return id;},cancelAnimationFrame(q){frames.delete(q);}};
@@ -38,7 +46,7 @@ function fixture(hash='',canvas=true,work=false)
         }
         assert.equal(frames.size,0);
     }
-    return {navigation,selectors,document,window,location,pushes,assigns,reducedMotion,classes,frames,flush};
+    return {navigation,selectors,document,window,location,pushes,assigns,reducedMotion,classes,frames,recordMessages,flush};
 }
 (async()=>{
     const f=fixture(),n=f.navigation;
@@ -82,5 +90,37 @@ function fixture(hash='',canvas=true,work=false)
     assert.deepEqual(failed.assigns,['http://localhost:6007/work-lab.html']);
     const workFallback=fixture('',false,true),fallbackOpen=workFallback.navigation.go('work');workFallback.selectors.get('.work-frame').dispatch('load');await workFallback.flush();await fallbackOpen;
     assert.equal(workFallback.navigation.panel.dataset.view,'work');assert.equal(workFallback.frames.size,0);
-    console.log('Liquid seam navigation passed: vertical About, horizontal Work, exact reverses, cancellation and stale loads, resize, hidden tabs, reduced motion, browser history, direct routes, focus, trusted frame messages and load/canvas fallbacks.');
+    const record=fixture('',true,false,true),recordFrame=record.selectors.get('.about-frame');
+    const recordOpen=record.navigation.go('about');
+    assert.equal(record.selectors.get('.about-link')['aria-busy'],'true');
+    recordFrame.dispatch('load');await record.flush();await recordOpen;
+    assert.equal(record.navigation.panel.dataset.view,'about');assert.equal(recordFrame.focused,true);
+    assert.deepEqual(record.recordMessages.map(item=>item.message.phase),['hidden','enter','visible']);
+    assert.ok(record.recordMessages.every(item=>item.origin===record.location.origin));
+    assert.equal(record.recordMessages[1].message.animate,true);
+    await record.navigation.go('home',{animate:false});
+    assert.deepEqual(record.recordMessages.slice(-2).map(item=>item.message.phase),['leave','hidden']);
+    const staleRecord=fixture('',true,false,true),staleRecordOpen=staleRecord.navigation.go('about');
+    await staleRecord.navigation.go('home',{animate:false});staleRecord.selectors.get('.about-frame').dispatch('load');
+    await staleRecord.flush();await staleRecordOpen;
+    assert.equal(staleRecord.navigation.panel.dataset.view,'home');
+    assert.ok(!staleRecord.recordMessages.some(item=>item.message.phase==='enter'));
+    const badRecord=fixture('',true,false,true),badRecordOpen=badRecord.navigation.go('about');
+    badRecord.selectors.get('.about-frame').dispatch('error');await badRecordOpen;
+    assert.deepEqual(badRecord.assigns,['record-lab.html?variant=graphic&copy=labels']);
+    const directRecord=fixture('#about',true,false,true);directRecord.selectors.get('.about-frame').dispatch('load');
+    await directRecord.flush();assert.equal(directRecord.navigation.panel.dataset.view,'about');
+    assert.equal(directRecord.recordMessages.find(item=>item.message.phase==='enter').message.animate,false);
+    const reducedRecord=fixture('',true,false,true);reducedRecord.reducedMotion.matches=true;
+    const reducedRecordOpen=reducedRecord.navigation.go('about');reducedRecord.selectors.get('.about-frame').dispatch('load');
+    await reducedRecord.flush();await reducedRecordOpen;
+    assert.equal(reducedRecord.recordMessages.find(item=>item.message.phase==='enter').message.animate,false);
+    const slowRecord=fixture('#about',true,false,true,'?recordEntrance=spin&recordPreview=1&recordSlow=1');
+    slowRecord.selectors.get('.about-frame').dispatch('load');await slowRecord.flush();
+    const slowEntrance=slowRecord.recordMessages.find(item=>item.message.phase==='enter').message;
+    assert.equal(slowEntrance.animate,true);assert.equal(slowEntrance.duration,3400);
+    assert.match(slowRecord.selectors.get('.about-frame').src,/entrance=spin$/);
+    const selectedRecord=fixture('',true,false,true,'?recordEntrance=spin');
+    assert.equal(selectedRecord.navigation.recordEntrance,'cue','The selected main-page entrance stays Cue outside laboratory previews');
+    console.log('Liquid seam navigation passed, including record readiness, entrance/exit messages, focus, stale loads and record fallback.');
 })().catch(e=>{console.error(e);process.exitCode=1;});

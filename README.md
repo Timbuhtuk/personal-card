@@ -50,7 +50,7 @@ Kvasir uses a detailed overhead turntable concept with an iris-textured green vi
 
 The “me”, “work” and Home links animate their underline on hover; Home also nudges its small outward arrow. Hover effects require a fine pointer and a viewport wider than 600 px; reduced motion disables the movement. Scrollbars are visually hidden while wheel, touch and keyboard scrolling remain available.
 
-The underlined “me” link in “Find me and my work elsewhere.” opens About with the selected **14 Liquid seam** transition. Two flowing vertical edges open from the center over 1.7 seconds; returning home plays the exact mask and contours in reverse. Both views remain live underneath the reveal, and the Life bands stay outside it. About contains a short introduction and the 14 supplied SVG logos. Contours use their own animation time: fully hidden About pauses them, while transitions keep them moving without a catch-up jump. The Back to home link, browser history, direct #about links, keyboard focus and reduced motion are supported. Resize or leaving the tab settles the active transition. Without JavaScript, the #about target still displays static About content.
+The underlined “me” link in “Find me and my work elsewhere.” opens About with the selected **14 Liquid seam** transition. Two flowing vertical edges open from the center over 1.7 seconds; returning home plays the exact mask and contours in reverse. Both views remain live underneath the reveal, and the Life bands stay outside it. About now embeds the Graphic record carousel with three English profile sections, small section labels, the iris center texture and Home link. Fonts and texture decode before the first reveal. The record turns 18 degrees into place and the tonearm approaches during the opening, then reverses on return. Only trusted same-origin parent messages control this movement. Direct #about links, canceled loads, keyboard focus, light/dark themes and reduced motion are supported; resize or hiding the page settles the current transition. Contours keep moving during transitions without a catch-up jump. Without JavaScript, the About target offers a link to the standalone record page.
 
 The earlier falling-logo and ribbon studies are retired from the active preview. Their source remains for reference. The source notes and licences accompany the supplied SVG files in dist/assets/technology-logos/.
 
@@ -75,7 +75,37 @@ node transition-lifecycle.test.cjs
 
 Optional local performance diagnostics: open `?profile=1&seed=2` and keep the pointer over the name. The console reports a sample after warmup. Normal visits use a random seed and no diagnostics.
 
+## About layout studies
+
+`about-lab.html` is a separate comparison page with three English layouts: `?variant=editorial`, `?variant=statement` and `?variant=living`. Editorial uses two columns and a shared technology strip. Statement combines large typography with project previews on hover, keyboard focus or mobile tap. Living system surrounds a procedural contour figure with 14 selectable technology logos; selection changes its shape and caption.
+
+The earlier layout studies reuse the site fonts, automatic light/dark palette, technology SVGs, contour worker and cursor. Small screens stack the content. Reduced motion keeps artwork static, and hidden pages stop their animation loops. The main local About now uses the record study below.
+
+## Vector turntable study
+
+`turntable.html` is an About experiment based on the Kvasir cover, with no raster images or external libraries. Its chassis, iris record, fixed reflections, spindle, support and movable tonearm are independent SVG groups. Seeded paths construct the iris fibers and vinyl grooves. A stationary printed center label presents short draft English sections while the surrounding iris record rotates.
+
+The three physical buttons select About me, What I build and How I think. Each selection fades the printed copy and moves the needle to the corresponding groove; dragging and releasing the tonearm selects the nearest section. Arrow keys and Home/End offer the same control. Mobile framing enlarges the record, places the buttons below it and keeps the needle outside the enlarged label. Reduced motion disables automatic animation, and hidden tabs suspend it. Copy and selection behavior live in `turntable-sections.js`; `turntable.js` only generates the vector texture.
+
+## Oversized record carousel studies
+
+`record-lab.html` compares six cropped, monochrome SVG turntables: `?variant=minimal`, `graphic`, `wireframe`, `studio`, `macro` and `blend`. Their record diameter exceeds the viewport, with the hub and most of the chassis outside the frame. Draft English copy is printed on the outer moving surface at three positions 120 degrees apart. The text and disc share one rotating group; reflections and hardware remain separate.
+
+Blend combines Minimal's dark palette, Graphic's flat hardware and Macro's close crop. Macro and Blend share a physical drawing scale: a 300 mm record and 230 mm effective tonearm, with the shaft, headshell and pivot scaled from the record radius. The pivot remains beyond the frame; hardware no longer stays small as the record grows.
+
+Graphic uses a detailed green iris texture only on its center label (28% of the record radius), with the outer vinyl unchanged. The texture is generated from the supplied eye reference, preserving asymmetric bright reflections, dark pockets and coarse broken fibers; its master and prompt are in `dist/assets/record/`. The label shares the disc rotation. Its center is normally below the crop; the Center detail control or `?variant=graphic&detail=center` frames this label for inspection, and Back to crop restores the original framing.
+
+Graphic presents three complete English sections: Who I Am?, What I Build? and How I Think?. They introduce Tymofii, connect Tessera, Sonar, Kvasir, SideQuest and Between Two Worlds, and describe an iterative approach to building software. Copy wraps at 16 px on desktop and 14 px on mobile, reducing its size in tighter layouts rather than truncating it. Mobile columns reserve space for the headshell, center artwork and controls.
+
+Use the numbered section buttons, previous/next buttons, arrow keys, wheel or horizontal dragging to turn the record. Each turn settles on a readable section. Mobile framing keeps the copy and controls visible. Animation runs only during interaction, reduced motion settles immediately, and resize or hiding the tab completes the current movement. `?variant=graphic&embedded=1` removes lab controls and uses the site theme and cursor for the main About. The earlier full turntable prototype remains separate.
+
+## Record entrance comparison
+
+`record-entrance-lab.html` previews six appearances inside the real Home-to-About Liquid seam: Cue, Spin-up, Roll-in, Groove trace, Pull back and Scan. The laboratory loads the main page with a whitelisted `recordEntrance` query and a preview-only autoplay flag. Replay restarts the transition; Slow doubles both reveal durations; Home and me exercise the reverse and forward directions in place. The main page still defaults to Cue. All modes converge to the same final record pose, support reduced motion and use the existing trusted parent-message lifecycle. `record-entrance-motion.test.cjs` checks the motion samples and reverse poses.
+
 ## Publishing
+
+The selected About appearance is **01 Cue**: an 18-degree record turn and a gentle tonearm approach. The selected typography is **01 Small labels only**: small section labels and body text, without large titles. `record-copy-lab.html` retains both typography options for comparison. Alternate appearances remain available only in the entrance laboratory preview.
 
 GitHub Actions checks the artwork and publishes `dist/` to GitHub Pages after each push to `main`. Pages uses the **GitHub Actions** publishing source.
 

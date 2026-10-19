@@ -34,6 +34,7 @@ jobs:
           node entrance-animation.test.cjs
           node logo-motion.test.cjs
           node about-navigation.test.cjs
+          node record-entrance-motion.test.cjs
           node liquid-seam.test.cjs
           node signal-cursor.test.cjs
           node theme.test.cjs

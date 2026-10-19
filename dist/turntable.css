@@ -1,0 +1,33 @@
+:root { color-scheme: dark; }
+* { box-sizing: border-box; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+body { margin: 0; background: #0c0d0e; }
+main { width: 100%; min-height: 100svh; display: grid; place-items: center; overflow: hidden; background: radial-gradient(ellipse at 44% 37%, #232626 0, #131617 42%, #0c0d0e 78%); }
+.turntable { display: block; width: min(97vw, 134svh, 1500px); height: auto; overflow: visible; }
+.record-rotor { transform-box: fill-box; transform-origin: center; will-change: transform; animation: record-turn 12s linear infinite; animation-play-state: paused; }
+.turntable[data-spinning="true"] .record-rotor { animation-play-state: running; }
+@keyframes record-turn { to { transform: rotate(360deg); } }
+.tonearm { cursor: grab; touch-action: none; outline: none; }
+.tonearm.dragging { cursor: grabbing; }
+.tonearm:focus-visible > g { filter: drop-shadow(0 0 3px #bdf58f); }
+.hardware-button { cursor: pointer; outline: none; }
+.hardware-button:focus-visible { filter: drop-shadow(0 0 3px #bdf58f); }
+.hardware-button.pressed > rect:nth-of-type(2) { transform: translateY(2px); }
+.hardware-button[aria-pressed="true"] > rect:nth-of-type(3) { fill: #293b27; stroke: #98b27c; }
+.button-number { fill: #d4dbce; font: 11px 'Cascadia Code', monospace; text-anchor: middle; pointer-events: none; }
+.label-copy { transition: opacity .16s ease; }
+.label-copy.changing { opacity: 0; }
+.label-kicker { fill: #a6b29b; font: 12px 'Cascadia Code', monospace; letter-spacing: 2px; }
+.label-heading { fill: #e8eddf; font: 600 32px 'Science Gothic', sans-serif; letter-spacing: -1px; }
+.label-body { fill: #d1dac9; font: 18px 'Cascadia Code', monospace; }
+.label-signature { fill: #9fae93; font: 10px 'Cascadia Code', monospace; letter-spacing: 3px; }
+@media (max-width: 600px) {
+    .turntable { width: 100vw; }
+    .label-stock { transform: scale(1.24); }
+    #deck-back, #deck-bevel { height: 940px; }
+    #deck-face { height: 926px; }
+    #deck-grain { height: 922px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .record-rotor { animation: none; will-change: auto; }
+    .label-copy { transition: none; }
+}

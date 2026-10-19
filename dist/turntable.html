@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0c0d0e">
+    <title>About on a record — Timbuhtuk</title>
+    <link rel="preload" href="assets/fonts/science-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="assets/styles/fonts.css">
+    <link rel="stylesheet" href="turntable.css">
+    <script src="turntable.js" defer></script>
+    <script src="turntable-sections.js" defer></script>
+</head>
+<body>
+<main aria-label="Vector turntable study">
+    <svg class="turntable" viewBox="0 0 1400 980" role="group" aria-label="Interactive black turntable with a green iris vinyl record">
+        <defs>
+            <linearGradient id="chassis" x1="0" y1="0" x2=".8" y2="1" gradientUnits="objectBoundingBox"><stop stop-color="#343638"/><stop offset=".38" stop-color="#242628"/><stop offset="1" stop-color="#141618"/></linearGradient>
+            <linearGradient id="bevel" x2="0" y2="1"><stop stop-color="#777b7c"/><stop offset=".04" stop-color="#3d4042"/><stop offset=".9" stop-color="#111214"/><stop offset="1" stop-color="#060708"/></linearGradient>
+            <linearGradient id="silver" x2="1" y2=".15"><stop stop-color="#282d30"/><stop offset=".17" stop-color="#8e9598"/><stop offset=".34" stop-color="#f3f4ee"/><stop offset=".46" stop-color="#9da5a9"/><stop offset=".75" stop-color="#343b3f"/><stop offset="1" stop-color="#c0c4c3"/></linearGradient>
+            <linearGradient id="tube" x2="1" y2="0"><stop stop-color="#101719"/><stop offset=".18" stop-color="#525e63"/><stop offset=".36" stop-color="#e4e9e8"/><stop offset=".52" stop-color="#bfc9cc"/><stop offset=".78" stop-color="#424c50"/><stop offset="1" stop-color="#11191d"/></linearGradient>
+            <linearGradient id="black-metal" x1="0" x2=".8" y2="1"><stop stop-color="#4b4f50"/><stop offset=".035" stop-color="#242729"/><stop offset=".55" stop-color="#171a1d"/><stop offset="1" stop-color="#090c0e"/></linearGradient>
+            <linearGradient id="button-metal" x2="0" y2="1"><stop stop-color="#e4e4dd"/><stop offset=".12" stop-color="#888e8f"/><stop offset=".55" stop-color="#bfc4c3"/><stop offset=".58" stop-color="#333a3d"/><stop offset="1" stop-color="#171b1e"/></linearGradient>
+            <radialGradient id="platter-metal"><stop offset=".93" stop-color="#0c0e0d"/><stop offset=".951" stop-color="#383c39"/><stop offset=".966" stop-color="#858b83"/><stop offset=".976" stop-color="#111915"/><stop offset=".987" stop-color="#555e55"/><stop offset="1" stop-color="#080b09"/></radialGradient>
+            <radialGradient id="iris-color"><stop offset=".27" stop-color="#142b19"/><stop offset=".4" stop-color="#a7f835"/><stop offset=".54" stop-color="#62c52b"/><stop offset=".66" stop-color="#178439"/><stop offset=".8" stop-color="#06492c"/><stop offset=".94" stop-color="#012916"/><stop offset="1" stop-color="#020d08"/></radialGradient>
+            <radialGradient id="iris-shade"><stop offset=".3" stop-color="#b4ff40" stop-opacity="0"/><stop offset=".66" stop-color="#001a12" stop-opacity=".12"/><stop offset="1" stop-color="#000b07" stop-opacity=".84"/></radialGradient>
+            <radialGradient id="label"><stop stop-color="#272c29"/><stop offset=".7" stop-color="#202421"/><stop offset=".97" stop-color="#191d1a"/><stop offset="1" stop-color="#090e0a"/></radialGradient>
+            <radialGradient id="spindle" cx=".35" cy=".24"><stop stop-color="#fffef1"/><stop offset=".28" stop-color="#cbd0c9"/><stop offset=".5" stop-color="#777e78"/><stop offset=".7" stop-color="#e1e3da"/><stop offset="1" stop-color="#434a46"/></radialGradient>
+            <linearGradient id="disc-light" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d6ffdc" stop-opacity="0"/><stop offset=".28" stop-color="#d6ffdc" stop-opacity=".03"/><stop offset=".42" stop-color="#e6ffdd" stop-opacity=".24"/><stop offset=".48" stop-color="#e6ffdd" stop-opacity=".04"/><stop offset=".7" stop-color="#e6ffdd" stop-opacity="0"/></linearGradient>
+            <clipPath id="record-clip"><circle r="378"/></clipPath>
+            <mask id="iris-ring" maskUnits="userSpaceOnUse" x="-390" y="-390" width="780" height="780"><circle r="378" fill="white"/><circle r="113" fill="black"/></mask>
+            <filter id="deck-shadow" x="-.15" y="-.15" width="1.4" height="1.5"><feDropShadow dx="12" dy="25" stdDeviation="20" flood-color="#000" flood-opacity=".65"/></filter>
+            <filter id="part-shadow" x="-.5" y="-.5" width="2" height="2"><feDropShadow dx="6" dy="10" stdDeviation="5" flood-color="#000" flood-opacity=".75"/></filter>
+            <filter id="disc-shadow" x="-.15" y="-.15" width="1.3" height="1.3"><feDropShadow dx="5" dy="12" stdDeviation="6" flood-color="#000" flood-opacity=".8"/></filter>
+            <filter id="grain" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency=".82" numOctaves="2" seed="7" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope=".13"/></feComponentTransfer><feComposite in2="SourceGraphic" operator="in"/></filter>
+        </defs>
+        <g class="deck" filter="url(#deck-shadow)">
+            <g fill="#111416" stroke="#4d5253" stroke-width="1">
+                <rect x="210" y="68" width="92" height="42" rx="7"/><rect x="1110" y="68" width="92" height="42" rx="7"/>
+                <path d="M224 70v28m63-28v28m-49-28v28m35-28v28M1124 70v28m63-28v28m-49-28v28m35-28v28"/>
+            </g>
+            <rect id="deck-back" x="70" y="96" width="1260" height="824" rx="14" fill="#07090b"/>
+            <rect id="deck-bevel" x="70" y="88" width="1260" height="824" rx="14" fill="url(#bevel)" stroke="#0b0e10" stroke-width="2"/>
+            <rect id="deck-face" x="74" y="92" width="1252" height="810" rx="11" fill="url(#chassis)" stroke="#4a4f50" stroke-width="1"/>
+            <rect id="deck-grain" x="76" y="94" width="1248" height="806" rx="10" fill="#a6aaa8" filter="url(#grain)" opacity=".32"/>
+            <path d="M88 93H1312" stroke="#bac1ba" stroke-opacity=".3"/>
+        </g>
+        <g transform="translate(510 497)">
+            <circle r="399" fill="url(#platter-metal)" filter="url(#disc-shadow)"/>
+            <circle r="390" fill="#030b06" stroke="#52604f" stroke-width="1"/>
+            <g class="record-rotor" id="record-rotor">
+                <circle r="383" fill="url(#iris-color)"/>
+                <g id="iris-fibers" mask="url(#iris-ring)"></g>
+                <circle r="379" fill="url(#iris-shade)"/>
+                <g id="record-grooves" clip-path="url(#record-clip)"></g>
+            </g>
+            <g clip-path="url(#record-clip)" pointer-events="none">
+                <path d="M-390-360 360 390 390 280-280-390Z" fill="url(#disc-light)" mask="url(#iris-ring)"/>
+                <path d="M-380-225 250 380 295 380-380-285Z" fill="#d9ffe0" opacity=".035" mask="url(#iris-ring)"/>
+                <circle r="381" fill="none" stroke="#6cac75" stroke-opacity=".35" stroke-width="1"/>
+            </g>
+            <g class="label-stock">
+                <circle r="214" fill="#080d09" stroke="#68835b" stroke-opacity=".5" stroke-width="1"/>
+                <circle r="209" fill="url(#label)" stroke="#7a8c68" stroke-opacity=".3" stroke-width=".7"/>
+                <circle r="205" fill="#a4b2a6" filter="url(#grain)" opacity=".18"/>
+                <circle r="193" fill="none" stroke="#73816a" stroke-opacity=".23" stroke-width=".5"/>
+                <g class="label-copy" id="label-copy" aria-live="polite" aria-label="About me">
+                    <text class="label-kicker" id="label-kicker" x="0" y="-150" text-anchor="middle">01 / ABOUT ME</text>
+                    <text class="label-heading" id="label-heading" text-anchor="middle"><tspan x="0" y="-95">A little</tspan><tspan x="0" y="-56">about me.</tspan></text>
+                    <text class="label-body" id="label-body" text-anchor="middle"><tspan x="0" y="54">I'm Tymofii Pankovskyi.</tspan><tspan x="0" y="81">I build applications,</tspan><tspan x="0" y="108">tools and game systems.</tspan></text>
+                </g>
+                <path d="M-36 143H36" stroke="#a4b999" stroke-opacity=".4" stroke-width=".7"/>
+                <text class="label-signature" x="0" y="165" text-anchor="middle">TIMBUHTUK</text>
+                <circle r="25" fill="none" stroke="#77866d" stroke-opacity=".3" stroke-width=".6"/>
+            </g>
+            <ellipse cx="4" cy="7" rx="13" ry="10" fill="#000" opacity=".65"/>
+            <circle r="10" fill="url(#spindle)" stroke="#c1c9bb" stroke-width=".7"/>
+            <path d="m-5-5 9 9" stroke="#ebefe2" stroke-width="1" opacity=".6"/>
+        </g>
+        <g class="tonearm-support" filter="url(#part-shadow)">
+            <path d="M974 174C1040 93 1217 107 1262 224C1321 379 1212 458 1087 452" fill="none" stroke="#101719" stroke-width="8"/>
+            <path d="M974 172C1040 91 1217 105 1262 222C1321 377 1212 456 1087 450" fill="none" stroke="url(#silver)" stroke-width="5"/>
+            <ellipse cx="1138" cy="228" rx="76" ry="56" fill="#101416" stroke="#3e4446"/>
+            <ellipse cx="1138" cy="223" rx="61" ry="43" fill="url(#black-metal)" stroke="#4c5254"/>
+            <path d="M1100 264h71v17h-71z" fill="#080d0f" stroke="#40484b"/>
+            <path d="M1107 277v113" stroke="#0a0e10" stroke-width="10"/>
+            <path d="M1107 277v113" stroke="url(#silver)" stroke-width="5"/>
+            <rect x="1087" y="367" width="40" height="20" rx="2" fill="url(#black-metal)" stroke="#515b5e"/>
+            <path d="m1113 292-24-36" stroke="#080c0e" stroke-width="12" stroke-linecap="round"/>
+            <path d="m1111 289-21-32" stroke="#8d9697" stroke-opacity=".25" stroke-width="3" stroke-linecap="round"/>
+            <g transform="translate(1231 335)">
+                <circle r="35" fill="#070b0d"/>
+                <circle cy="-3" r="31" fill="url(#silver)" stroke="#868f8f" stroke-width="1"/>
+                <g id="dial-ticks"></g>
+                <circle cy="-3" r="21" fill="url(#spindle)" stroke="#c3c9c5" stroke-width=".5"/>
+                <path d="M0-21v7" stroke="#232b2b" stroke-width="2"/>
+            </g>
+        </g>
+        <g id="tonearm" class="tonearm" transform="translate(1140 220) rotate(39)" role="slider" tabindex="0" aria-label="Select a record section" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1">
+            <g filter="url(#part-shadow)">
+                <rect x="-7" y="-137" width="14" height="672" rx="6" fill="url(#tube)" stroke="#777f82" stroke-width=".5"/>
+                <path d="M-2-135v654" stroke="#f1f4ed" stroke-width="1.2" opacity=".35"/>
+                <rect x="-21" y="-126" width="42" height="64" rx="7" fill="url(#silver)" stroke="#727b7e"/>
+                <path d="M-17-119v49m34-49v49M-19-74h38" fill="none" stroke="#151d20" stroke-width="1.3" opacity=".75"/>
+                <rect x="-44" y="-29" width="88" height="58" rx="3" fill="url(#black-metal)" stroke="#555f62" stroke-width="1"/>
+                <path d="M-42-27h84v5h-84z" fill="#717879" opacity=".25"/>
+                <circle cx="-32" r="4" fill="url(#spindle)"/><circle cx="32" r="4" fill="url(#spindle)"/>
+                <path d="M-19 519H17L25 576 10 596H-20L-24 572Z" fill="url(#black-metal)" stroke="#7a8384" stroke-width="1"/>
+                <path d="M-18 521H16" stroke="#c3cecb" stroke-opacity=".6"/>
+                <g fill="#040a0b" stroke="#444e4f" stroke-width=".5"><rect x="-10" y="559" width="23" height="3" rx="1"/><rect x="-10" y="566" width="23" height="3" rx="1"/><rect x="-10" y="573" width="23" height="3" rx="1"/></g>
+                <circle cx="-6" cy="537" r="4" fill="url(#spindle)"/><circle cx="-5" cy="550" r="4" fill="url(#spindle)"/>
+                <path d="M2 590v10l-4 7" fill="none" stroke="#b7c9b9" stroke-width="2"/>
+                <circle id="stylus-tip" cx="-2" cy="607" r="2" fill="#def6cc"/>
+                <path d="M14 580h15v14h-15" fill="none" stroke="url(#silver)" stroke-width="3" stroke-linejoin="round"/>
+            </g>
+        </g>
+        <g class="controls" transform="translate(996 823)">
+            <circle cx="-28" cy="16" r="4" fill="#0b1e10" stroke="#687460" stroke-width=".7"/>
+            <circle id="power-light" cx="-28" cy="16" r="2.1" fill="#a6f65a"/>
+            <g class="hardware-button" id="reset-button" role="button" tabindex="0" aria-label="Return needle to the start" transform="translate(0 0)"><rect x="-3" y="-3" width="86" height="40" rx="2" fill="#060a0c"/><rect width="80" height="33" rx="2" fill="url(#button-metal)" stroke="#7d8584"/><path d="M4 4h72" stroke="#edf0e6" stroke-width="1" opacity=".65"/><rect x="3" y="18" width="74" height="12" fill="#131a1d" stroke="#687273" stroke-width=".5"/></g>
+            <g class="hardware-button" id="play-button" role="button" tabindex="0" aria-label="Pause turntable" aria-pressed="true" transform="translate(107 0)"><rect x="-3" y="-3" width="86" height="40" rx="2" fill="#060a0c"/><rect width="80" height="33" rx="2" fill="url(#button-metal)" stroke="#7d8584"/><path d="M4 4h72" stroke="#edf0e6" stroke-width="1" opacity=".65"/><rect x="3" y="18" width="74" height="12" fill="#131a1d" stroke="#687273" stroke-width=".5"/></g>
+            <g class="hardware-button" id="cue-button" role="button" tabindex="0" aria-label="Lift and park tonearm" aria-pressed="false" transform="translate(214 0)"><rect x="-3" y="-3" width="58" height="40" rx="2" fill="#060a0c"/><rect width="52" height="33" rx="2" fill="url(#button-metal)" stroke="#7d8584"/><path d="M4 4h44" stroke="#edf0e6" stroke-width="1" opacity=".65"/><rect x="3" y="18" width="46" height="12" fill="#131a1d" stroke="#687273" stroke-width=".5"/></g>
+        </g>
+    </svg>
+</main>
+</body>
+</html>
