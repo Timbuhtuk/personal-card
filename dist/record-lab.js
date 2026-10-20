@@ -18,6 +18,7 @@
     const copyPreview = new URLSearchParams(location.search).get('copyPreview') === '1';
     const requestedCopy = new URLSearchParams(location.search).get('copy');
     const copyMode = ['labels', 'titles'].includes(requestedCopy) ? requestedCopy : 'both';
+    const wideStudy = new URLSearchParams(location.search).get('layout') === 'wide';
     stage.dataset.copyMode = copyMode;
     const colorScheme = matchMedia('(prefers-color-scheme: light)');
     if (embedded || copyPreview)
@@ -83,9 +84,9 @@
     }
     function fillCopy(group, index, size, start, anchor)
     {
-        const { width, height, anchorX, anchorY, alpha, cy, radius } = scene;
+        const { width, height, anchorX, anchorY, alpha, cy, radius, textRadius, wide } = scene;
         const mobile = width < 600;
-        const columnWidth = Math.min(560, width * (mobile ? .60 : .52));
+        const columnWidth = wide ? Math.min(620, width * .39) : Math.min(560, width * (mobile ? .60 : .52));
         const bodyX = mobile ? -width * .04 : 0;
         const bottom = Math.min(height - (mobile ? 160 : 108), cy - radius * .28 * 1.01 - 24);
         const words = sections[index].copy.split(/\s+/);
@@ -106,10 +107,21 @@
                 const y = start + q * size * 1.65;
                 const length = copyMeasure.measureText(line).width;
                 const left = bodyX + (anchor === 'middle' ? -length / 2 : 0);
+                if (wide)
+                {
+                    const nearestX = Math.max(left, Math.min(left + length, 0));
+                    const nearestY = Math.max(y - size, Math.min(y + size * .25, textRadius));
+                    if (Math.hypot(nearestX, nearestY - textRadius) < radius * .28 + 24) return false;
+                }
                 const corners = [[left, y - size], [left + length, y - size], [left, y + size * .25], [left + length, y + size * .25]];
                 return corners.every(([x, y]) => {
                     const px = anchorX + Math.cos(alpha) * x - Math.sin(alpha) * y;
                     const py = anchorY + Math.sin(alpha) * x + Math.cos(alpha) * y;
+                    if (wide)
+                    {
+                        const distance = Math.hypot(x, y - textRadius);
+                        return px >= 24 && px <= width - 24 && py >= 24 && py <= height - 100 && distance >= radius * .28 + 24 && distance <= radius - 24;
+                    }
                     return px >= 20 && px <= width - 20 && py <= bottom;
                 });
             });
@@ -186,12 +198,13 @@
         if (!config.detail) return;
         if (config.physicalArm) { drawPhysicalArm(config, width, height); return; }
         const wire = config.detail === 2, detailed = config.detail >= 3, macro = config.detail === 4;
-        const pivot = { x: width * (macro ? 1.24 : 1.015), y: height * (macro ? -.22 : .12) };
-        const tip = { x: width * (width < 600 ? .94 : .85), y: height * (macro ? .70 : .69) };
+        const pivot = scene.wide ? { x: Math.min(width - 145, scene.cx + scene.radius * 1.12), y: height * .20 } : { x: width * (macro ? 1.24 : 1.015), y: height * (macro ? -.22 : .12) };
+        const tip = scene.wide ? { x: scene.cx + scene.radius * .65, y: scene.cy + scene.radius * .10 - Math.min(26, Math.max(0, (1100 - width) * .35)) } : { x: width * (width < 600 ? .94 : .85), y: height * (macro ? .70 : .69) };
         const length = Math.hypot(tip.x - pivot.x, tip.y - pivot.y);
         const angle = Math.atan2(pivot.x - tip.x, tip.y - pivot.y) * 180 / Math.PI;
         const size = Math.max(.65, Math.min(1.12, width / 1050));
         scene.arm = { ...pivot, angle };
+        if (scene.wide) scene.arm.trackSweep = .8;
         const support = node('g', { transform: 'translate(' + pivot.x + ' ' + pivot.y + ') scale(' + size + ')' });
         if (wire)
         {
@@ -244,13 +257,17 @@
         if (!width || !height) return;
         sceneDirty = false; stage.dataset.sceneBuilds = ++sceneBuilds;
         const config = variants[variant], mobile = width < 600;
-        const alpha = (mobile && config.angle > 0 ? 13 : config.angle) * Math.PI / 180;
-        const textRadius = Math.max(width * .75, height * .82) * config.zoom;
-        const radius = textRadius / .82;
-        const anchorX = width * (mobile ? .45 : config.x);
-        const anchorY = height * (height < 430 ? .21 : mobile ? .36 : config.y);
-        const cx = anchorX - Math.sin(alpha) * textRadius, cy = anchorY + Math.cos(alpha) * textRadius;
-        scene = { width, height, cx, cy, radius, textRadius, alpha, anchorX, anchorY };
+        // Frame the desktop object by height instead of enlarging it with the window width.
+        const wide = wideStudy && variant === 'graphic' && width >= 1000 && width / height >= 1.3;
+        const alpha = (wide ? 16 : mobile && config.angle > 0 ? 13 : config.angle) * Math.PI / 180;
+        const textRadius = wide ? height * .55 : Math.max(width * .75, height * .82) * config.zoom;
+        const radius = wide ? height : textRadius / .82;
+        const cx = wide ? width * .33 : width * (mobile ? .45 : config.x) - Math.sin(alpha) * textRadius;
+        const cy = wide ? height * .78 : height * (height < 430 ? .21 : mobile ? .36 : config.y) + Math.cos(alpha) * textRadius;
+        const anchorX = cx + Math.sin(alpha) * textRadius;
+        const anchorY = cy - Math.cos(alpha) * textRadius;
+        scene = { width, height, cx, cy, radius, textRadius, alpha, anchorX, anchorY, wide };
+        stage.dataset.layout = wide ? 'wide' : 'original';
         svg.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
         svg.dataset.centerOutside = cy > height ? 'true' : 'false';
         svg.dataset.recordDiameter = Math.round(radius * 2);
@@ -294,7 +311,7 @@
             reflections.append(node('path', { d: 'M' + width * .12 + ' -100L' + width * .85 + ' ' + (height + 100) + 'H' + width * .98 + 'L' + width * .22 + ' -100Z', fill: '#fff', opacity: .018 }));
         }
         const titleSize = Math.min(config.detail === 4 ? 90 : 78, Math.max(mobile ? 36 : 40, width * (config.detail === 4 ? .07 : .061)), height * .115);
-        const bodySize = variant === 'graphic' ? (mobile ? 14 : 16) : Math.min(17, Math.max(11.5, width * .014), height * .04);
+        const bodySize = wide ? Math.max(18, Math.min(22, height * .025)) : variant === 'graphic' ? (mobile ? 14 : 16) : Math.min(17, Math.max(11.5, width * .014), height * .04);
         const anchor = mobile ? 'middle' : config.align;
         sections.forEach((section, index) => {
             const group = node('g', { transform: 'translate(' + cx + ' ' + cy + ') rotate(' + (index * 120 + alpha * 180 / Math.PI) + ') translate(0 ' + -textRadius + ')', 'data-copy': index, 'aria-label': section.name });
@@ -322,6 +339,11 @@
         rotor.style.opacity = state.opacity;
         hardware.style.opacity = state.armOpacity;
         print.style.opacity = state.textOpacity;
+        if (scene.wide) print.querySelectorAll('[data-copy]').forEach(group => {
+            // The smaller crop exposes the next sector at the left edge; fade it before it enters the reading position.
+            const angle = mod(Number(group.dataset.copy) * 120 + rotation + 180, 360) - 180;
+            group.style.opacity = Math.max(0, Math.min(1, (100 - Math.abs(angle)) / 25));
+        });
         const label = surfaces.querySelector('.iris-center-label');
         if (label) label.style.opacity = state.textureOpacity;
         stage.dataset.entranceMode = mode;

@@ -92,6 +92,7 @@ function fixture(hash='',canvas=true,work=false,record=false,search='')
     assert.equal(workFallback.navigation.panel.dataset.view,'work');assert.equal(workFallback.frames.size,0);
     const record=fixture('',true,false,true),recordFrame=record.selectors.get('.about-frame');
     const recordOpen=record.navigation.go('about');
+    assert.match(recordFrame.src,/&layout=wide$/,'The main About uses the selected desktop framing');
     assert.equal(record.selectors.get('.about-link')['aria-busy'],'true');
     recordFrame.dispatch('load');await record.flush();await recordOpen;
     assert.equal(record.navigation.panel.dataset.view,'about');assert.equal(recordFrame.focused,true);

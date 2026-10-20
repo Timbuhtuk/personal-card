@@ -47,3 +47,12 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--ts-color-accent
     .imprint-copy .social-links { width: 100%; flex-direction: row; flex-wrap: wrap; margin-top: 22px; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
+@media (max-height: 500px) and (min-width: 601px) {
+    .life-divider { height: 32px; }
+    .imprint-content { min-height: calc(100svh - 64px); padding: 16px 30px; }
+    .imprint-copy .eyebrow { font-size: 8px; }
+    .imprint-copy h1 { font-size: clamp(36px, 8svh, 46px); margin: 16px 0; }
+    .imprint-copy p { font-size: 12px; }
+    .imprint-copy .social-links { margin-top: 18px; }
+    .social-links a { min-height: 44px; padding-block: 12px; }
+}

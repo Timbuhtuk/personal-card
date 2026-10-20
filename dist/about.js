@@ -116,7 +116,9 @@ class AboutNavigation
             this.aboutFrame.addEventListener('load', loaded);
             this.aboutFrame.addEventListener('error', failed);
             timer = setTimeout(failed, 10000);
-            this.aboutFrame.src = this.aboutFrame.dataset.src + '&entrance=' + this.recordEntrance;
+            const useWideLayout = !this.recordPreview || /[?&]recordLayout=wide(?:&|$)/.test(location.search);
+            const layout = useWideLayout ? '&layout=wide' : '';
+            this.aboutFrame.src = this.aboutFrame.dataset.src + '&entrance=' + this.recordEntrance + layout;
         });
         return this.aboutReady;
     }

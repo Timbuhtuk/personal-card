@@ -111,6 +111,10 @@ Use the numbered section buttons, previous/next buttons, arrow keys, wheel or ho
 
 ## Publishing
 
+`record-layout-lab.html?layout=wide` compares the selected height-based desktop crop with the previous About framing. In the selected layout, windows at least 1000 px wide and with an aspect ratio of at least 1.3 show the green hub at the lower left, the tonearm pivot at the upper right and larger copy on the moving vinyl. Each printed block is centered on a radius through the spindle, with no sideways offset. Other sizes retain the existing composition. The laboratory includes the real Life bands and Cue transition, a replay control and a Full frame link. The main About route uses the selected layout automatically; the original composition remains available as option 02 in the laboratory.
+
+An independent screenshot review on 2026-10-20 accepted Home, Work and all three About sections in the candidate at 320, 390, 768, 1024, 1280, 1920 and 2560 px widths, plus 844 × 390 landscape. Dark and light palettes and tablet layouts without hover were inspected. Corrections include tonearm clearance from text and controls, visible light-theme navigation arrows, a 44 px About Home target and a compact Home composition for short windows. Full browser captures and the critic's matrix are stored in the task's sibling `visual-review/` folder. Light/coarse inspection used a local media-condition fixture; it is not a claim of physical touch-device testing or a published release. Future visual edits should repeat screenshot review at the affected widths before accepting them.
+
 The selected About appearance is **01 Cue**: an 18-degree record turn and a gentle tonearm approach. The selected typography is **01 Small labels only**: small section labels and body text, without large titles. `record-copy-lab.html` retains both typography options for comparison. Alternate appearances remain available only in the entrance laboratory preview.
 
 GitHub Actions checks the artwork and publishes `dist/` to GitHub Pages after each push to `main`. Pages uses the **GitHub Actions** publishing source.
