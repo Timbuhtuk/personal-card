@@ -23,8 +23,8 @@
     if (embedded || copyPreview)
     {
         document.body.classList.add('record-embedded');
-        const cursorStyle = document.createElement('link'); cursorStyle.rel = 'stylesheet'; cursorStyle.href = 'signal-cursor.css'; document.head.append(cursorStyle);
-        const cursorScript = document.createElement('script'); cursorScript.src = 'signal-cursor.js'; document.head.append(cursorScript);
+        const cursorStyle = document.createElement('link'); cursorStyle.rel = 'stylesheet'; cursorStyle.href = 'signal-cursor.css?v=perf-20261020'; document.head.append(cursorStyle);
+        const cursorScript = document.createElement('script'); cursorScript.src = 'signal-cursor.js?v=perf-20261020'; document.head.append(cursorScript);
     }
     const ns = 'http://www.w3.org/2000/svg';
     const mod = (value, length) => (value % length + length) % length;
@@ -44,6 +44,7 @@
     const copyMeasure = document.createElement('canvas').getContext('2d');
     let variant = 'minimal', selected = 0, rotation = 0, targetRotation = 0, armTrack = 0;
     let scene, armNode, frame = 0, gesture = null, resizeTimer, wheelSum = 0, wheelTime = -Infinity;
+    let sceneDirty = true, sceneBuilds = 0;
     let grooveNodes = [];
     let centerDetail = new URL(location.href).searchParams.get('detail') === 'center';
     let reveal = embedded ? 0 : 1, revealFrame = 0;
@@ -54,7 +55,7 @@
     }
     function animateReveal(opening, duration)
     {
-        cancelAnimationFrame(revealFrame); finish(); build();
+        cancelAnimationFrame(revealFrame); finish(); ensureScene();
         if (reduced.matches || document.hidden) { settleReveal(opening ? 1 : 0); return; }
         const from = reveal, target = opening ? 1 : 0;
         let start;
@@ -241,6 +242,7 @@
         finish();
         const width = stage.clientWidth, height = stage.clientHeight;
         if (!width || !height) return;
+        sceneDirty = false; stage.dataset.sceneBuilds = ++sceneBuilds;
         const config = variants[variant], mobile = width < 600;
         const alpha = (mobile && config.angle > 0 ? 13 : config.angle) * Math.PI / 180;
         const textRadius = Math.max(width * .75, height * .82) * config.zoom;
@@ -305,6 +307,10 @@
         });
         drawArm(config, width, height);
         updateSelection(); paint(); frameScene();
+    }
+    function ensureScene()
+    {
+        if (sceneDirty || !scene || scene.width !== stage.clientWidth || scene.height !== stage.clientHeight) build();
     }
     function paint()
     {
@@ -392,6 +398,7 @@
     function chooseVariant(name, historyChange = true)
     {
         variant = variants[name] ? name : 'minimal';
+        sceneDirty = true;
         document.body.dataset.variant = variant;
         document.querySelectorAll('[data-variant]').forEach(button => {
             if (button.tagName === 'BUTTON') button.setAttribute('aria-pressed', button.dataset.variant === variant);
@@ -464,17 +471,17 @@
             if (!['enter', 'leave', 'visible', 'hidden'].includes(phase)) return;
             window.dispatchEvent(new Event('personal-cursor-reset'));
             if ((phase === 'enter' || phase === 'leave') && animate) animateReveal(phase === 'enter', Math.max(100, Math.min(4000, duration || 1700)));
-            else { finish(); build(); settleReveal(phase === 'visible' || phase === 'enter' ? 1 : 0); }
+            else { finish(); ensureScene(); settleReveal(phase === 'visible' || phase === 'enter' ? 1 : 0); }
         });
-        colorScheme.addEventListener('change', build);
+        colorScheme.addEventListener('change', () => { sceneDirty = true; build(); });
     }
     const observer = new ResizeObserver(() => {
-        clearTimeout(resizeTimer); resizeTimer = setTimeout(build, 80);
+        clearTimeout(resizeTimer); resizeTimer = setTimeout(ensureScene, 80);
     });
     observer.observe(stage);
     buildCenterPattern();
     chooseVariant(new URLSearchParams(location.search).get('variant'), false);
     const texture = new Image(); texture.src = 'assets/record/iris-eye-v3.webp';
-    window.RecordStudyReady = Promise.all([document.fonts.ready, texture.decode()]).then(build);
+    window.RecordStudyReady = Promise.all([document.fonts.ready, texture.decode()]).then(() => { sceneDirty = true; build(); });
     window.RecordStudyReady.catch(() => {});
 })();

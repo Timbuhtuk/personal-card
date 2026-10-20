@@ -40,6 +40,11 @@ class EntranceAnimation
             throw Error('Canvas rendering is unavailable.');
         }
         this.elements.push(this.plot);
+        this.splitLines = Array.from({ length: 2 }, () => {
+            const line = document.createElement('div'); line.className = 'entrance-split-line';
+            line.setAttribute('aria-hidden', 'true'); line.hidden = true; this.surface.append(line);
+            return line;
+        });
         this.onResize = () => { if (document.documentElement.classList.contains('entrance-running')) this.finish(); };
         this.onVisibility = () => {
             if (document.hidden)
@@ -100,6 +105,7 @@ class EntranceAnimation
         for (const element of this.elements)
             for (const property of ['opacity', 'transform', 'clip-path', 'filter', 'transform-origin']) element.style.removeProperty(property);
         this.plot.hidden = true;
+        for (const line of this.splitLines) line.hidden = true;
         this.context.clearRect(0, 0, this.width || 0, this.height || 0);
     }
 
@@ -119,10 +125,6 @@ class EntranceAnimation
         const surface = this.surface.getBoundingClientRect();
         this.width = surface.width;
         this.height = surface.height;
-        const viewport = contourViewport(this.width, this.height, window.devicePixelRatio);
-        this.fx.width = viewport.pixelWidth;
-        this.fx.height = viewport.pixelHeight;
-        this.context.setTransform(this.fx.width / this.width, 0, 0, this.fx.height / this.height, 0, 0);
         this.bounds = new Map();
         for (const element of [this.heading, ...this.items])
         {
@@ -133,6 +135,18 @@ class EntranceAnimation
                 inkWidth: element.tagName === 'A' ? rect.width : range.getBoundingClientRect().width,
                 center: { x: rect.x - surface.x + rect.width / 2, y: rect.y - surface.y + rect.height / 2 } });
         }
+        // Hybrid's canvas draws only the name. The separating lines use composited DOM layers.
+        const title = this.bounds.get(this.heading);
+        const compact = ['hybrid', 'hybridTrace', 'split'].includes(this.mode);
+        const box = compact ? { x: title.x - 32, y: title.y - 32, width: title.width + 64, height: title.height + 64 }
+            : { x: 0, y: 0, width: this.width, height: this.height };
+        const fxScale = Math.min(window.devicePixelRatio || 1, 1.5, Math.sqrt(3000000 / (box.width * box.height)));
+        this.fx.width = Math.max(1, Math.round(box.width * fxScale));
+        this.fx.height = Math.max(1, Math.round(box.height * fxScale));
+        Object.assign(this.fx.style, { left: box.x + 'px', top: box.y + 'px', width: box.width + 'px', height: box.height + 'px' });
+        this.context.setTransform(this.fx.width / box.width, 0, 0, this.fx.height / box.height,
+            -box.x * this.fx.width / box.width, -box.y * this.fx.height / box.height);
+        for (const line of this.splitLines) line.style.width = this.width + 'px';
         this.center = this.bounds.get(this.heading).center;
         this.artOpacity = getComputedStyle(this.art).opacity;
         this.plot.style.transformOrigin = `${this.center.x}px ${this.center.y}px`;
@@ -147,6 +161,7 @@ class EntranceAnimation
         this.nameParticles = artwork.name.motion.particles.map(particle => ({ ...particle }));
         this.nameTilePixels = artwork.name.tilePixels;
         this.geometry = artwork.geometry.result;
+        this.contourBlank = false; this.contourComplete = false;
         this.lines = this.geometry.frames.flatMap(frame => frame.paths.map((path, index) => {
             const points = [];
             let length = 0;
@@ -303,6 +318,7 @@ class EntranceAnimation
             canvas.width = canvas.height = 1;
             canvas.remove();
         }
+        for (const line of this.splitLines) line.remove();
         this.lines = this.nameParticles = this.letters = [];
         this.geometry = this.nameAtlas = null;
     }
@@ -467,6 +483,14 @@ class EntranceAnimation
 
     drawContourLines(time)
     {
+        if (time < 950)
+        {
+            if (!this.contourBlank) this.plotContext.clearRect(0, 0, artwork.width, artwork.height);
+            this.contourBlank = true; this.contourComplete = false;
+            return;
+        }
+        if (time >= 2500 && this.contourComplete) return;
+        this.contourBlank = false; this.contourComplete = time >= 2500;
         this.plotContext.clearRect(0, 0, artwork.width, artwork.height);
         this.plotContext.lineWidth = 1.3;
         this.plotContext.lineCap = this.plotContext.lineJoin = 'round';
@@ -562,15 +586,14 @@ class EntranceAnimation
         });
         const length = EntranceMotion.out(time, 0, 600) * EntranceMotion.mix(this.nameRight - this.nameLeft + 32, this.width, opening);
         const opacity = (1 - EntranceMotion.smooth(time, 1350, 1900)) * .7 * lineOpacity;
-        this.context.strokeStyle = `rgba(${this.inkRgb},${opacity})`;
-        this.context.lineWidth = 1;
-        this.context.beginPath();
-        for (const y of time < 690 ? [this.center.y] : [top, bottom])
+        const positions = time < 690 ? [this.center.y] : [top, bottom];
+        for (let q = 0; q < this.splitLines.length; q++)
         {
-            this.context.moveTo(this.center.x - length / 2, y);
-            this.context.lineTo(this.center.x + length / 2, y);
+            const line = this.splitLines[q]; line.hidden = q >= positions.length || opacity <= 0;
+            if (line.hidden) continue;
+            line.style.backgroundColor = `rgb(${this.inkRgb})`; line.style.opacity = opacity;
+            line.style.transform = `translate3d(${this.center.x - length / 2}px,${positions[q] - .5}px,0) scaleX(${length / this.width})`;
         }
-        this.context.stroke();
         this.revealLife(time, 1640, 2050);
     }
 }

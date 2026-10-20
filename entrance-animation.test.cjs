@@ -125,6 +125,7 @@ function environment()
         assert.equal(canvas.removed, true);
         assert.equal(canvas.width * canvas.height, 1, 'Release the temporary render buffers.');
     }
+    for (const line of animation.splitLines) assert.equal(line.removed, true, 'Remove the composited separator layers after the entrance.');
     assert.equal(scene.jobs.size, 0);
     assert.equal(scene.document.listeners.get('visibilitychange').size, 0);
 

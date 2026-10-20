@@ -1,2 +1,2 @@
-.signal-cursor-canvas { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 40; pointer-events: none; mix-blend-mode: difference; }
+.signal-cursor-canvas { position: fixed; left: 0; top: 0; width: 1px; height: 1px; z-index: 40; pointer-events: none; mix-blend-mode: difference; will-change: transform; }
 .signal-cursor-active main, .signal-cursor-active main * { cursor: none !important; }

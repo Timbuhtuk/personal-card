@@ -18,16 +18,16 @@ for (const [width, height] of [[390, 748], [1280, 592], [1920, 952], [3840, 2032
             const result = viewport(width / zoom, height / zoom, density * zoom);
             assert.ok(result.width > 0 && result.width <= 1920 + 1e-6);
             assert.ok(result.height > 0 && result.height <= 1080 + 1e-6);
-            assert.ok(result.pixelWidth > 0 && result.pixelWidth <= 8192);
-            assert.ok(result.pixelHeight > 0 && result.pixelHeight <= 8192);
-            assert.ok(result.pixelWidth * result.pixelHeight <= 16000000);
+            assert.ok(result.pixelWidth > 0 && result.pixelWidth <= 4096);
+            assert.ok(result.pixelHeight > 0 && result.pixelHeight <= 4096);
+            assert.ok(result.pixelWidth * result.pixelHeight <= 8000000);
             assert.ok(Math.abs(result.width / result.height - width / height) < 1e-6,
                 'The scene must preserve its aspect ratio.');
             cases++;
         }
 
 const standard = viewport(1280, 592, 1);
-assert.deepEqual(standard, { width: 1280, height: 592, pixelWidth: 2560, pixelHeight: 1184 });
+assert.deepEqual(standard, { width: 1280, height: 592, pixelWidth: 1920, pixelHeight: 888 });
 for (const zoom of [.25, .5, .8])
     assert.deepEqual(viewport(1280 / zoom, 592 / zoom, zoom), standard,
         'Zooming out must preserve the scene, line spacing and supersampling on a standard display.');

@@ -1,6 +1,7 @@
 .entrance-pending .imprint { visibility: hidden; }
 .entrance-running .imprint-copy, .entrance-running .imprint-copy * { pointer-events: none !important; }
 .entrance-fx { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 4; }
+.entrance-split-line { position: absolute; left: 0; top: 0; height: 1px; pointer-events: none; z-index: 4; transform-origin: 0 50%; will-change: transform, opacity; }
 .entrance-contours { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .entrance-running .imprint-copy h1, .entrance-running .imprint-copy .eyebrow,
 .entrance-running .imprint-copy p, .entrance-running .social-links a { will-change: transform, opacity; }
