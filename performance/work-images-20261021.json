@@ -1,0 +1,319 @@
+{
+  "policy": "Original dimensions retained. Lossless for pixel art/UI; quality 96 for four photographic images. Larger conversions discarded. Masters untouched.",
+  "originalBytes": 7299664,
+  "optimizedBytes": 1952663,
+  "images": [
+    {
+      "source": "assets/work/btw/gameplay.png",
+      "originalBytes": 1760167,
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "sourceSha256": "4d8fe0d410bd1d158002d68fe6af0e149cbcb4136409db5d40049a47bd644a8a",
+      "output": "assets/work/optimized/btw/gameplay.webp",
+      "bytes": 303304,
+      "encoding": "WebP quality 96",
+      "pixelIdentical": false,
+      "previewComparisons": [
+        {
+          "width": 460,
+          "lumaSsim": 0.998211,
+          "meanRgbError": 0.6103
+        },
+        {
+          "width": 920,
+          "lumaSsim": 0.996841,
+          "meanRgbError": 0.842
+        }
+      ],
+      "outputSha256": "473355cfdd0dc563c90894bdaebc39851e6c52427599bc091e763cefa670fc47"
+    },
+    {
+      "source": "assets/work/btw/gameplay-wildlife.png",
+      "originalBytes": 1770416,
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "sourceSha256": "349aa226bce7792f81b78d5a9e9b6c6c7dbd3c65805663521b4864f2d400295a",
+      "output": "assets/work/optimized/btw/gameplay-wildlife.webp",
+      "bytes": 304634,
+      "encoding": "WebP quality 96",
+      "pixelIdentical": false,
+      "previewComparisons": [
+        {
+          "width": 460,
+          "lumaSsim": 0.998206,
+          "meanRgbError": 0.6204
+        },
+        {
+          "width": 920,
+          "lumaSsim": 0.996852,
+          "meanRgbError": 0.8561
+        }
+      ],
+      "outputSha256": "828c56a1aec0be5790bd92e80d1f7614308a5d33fbc537ecde9e039eeac4656b"
+    },
+    {
+      "source": "assets/work/btw/gameplay-campfires.png",
+      "originalBytes": 1643654,
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "sourceSha256": "71dec5952307d9540c07b66330f4f4ec209b54fc1f33bc48e9797e5cc484b104",
+      "output": "assets/work/optimized/btw/gameplay-campfires.webp",
+      "bytes": 264534,
+      "encoding": "WebP quality 96",
+      "pixelIdentical": false,
+      "previewComparisons": [
+        {
+          "width": 460,
+          "lumaSsim": 0.99825,
+          "meanRgbError": 0.5883
+        },
+        {
+          "width": 920,
+          "lumaSsim": 0.997081,
+          "meanRgbError": 0.8005
+        }
+      ],
+      "outputSha256": "3368640a4749cbd3a4a8e7276390b889a68d1d2ee9ba3942b27ae412c2d44c68"
+    },
+    {
+      "source": "assets/work/tessera/mural-original.png",
+      "originalBytes": 1084586,
+      "dimensions": [
+        640,
+        640
+      ],
+      "sourceSha256": "5eaf1d9e5edcb03aee06a97539bad4f32cb4a1e38d8de63282ed088452a48dfa",
+      "output": "assets/work/optimized/tessera/mural-original.webp",
+      "bytes": 165950,
+      "encoding": "WebP quality 96",
+      "pixelIdentical": false,
+      "previewComparisons": [
+        {
+          "width": 460,
+          "lumaSsim": 0.998826,
+          "meanRgbError": 1.3021
+        },
+        {
+          "width": 920,
+          "lumaSsim": 0.995628,
+          "meanRgbError": 1.4855
+        }
+      ],
+      "outputSha256": "4834513d99e1acf481d59340ed3e3ad614927c1e469699371b9bde8e882cdd09"
+    },
+    {
+      "source": "assets/work/tessera/mural-pixel.png",
+      "originalBytes": 27661,
+      "dimensions": [
+        640,
+        640
+      ],
+      "sourceSha256": "d04a53dd87fe27917403c9b23230b11c0301243fe0330c60ea314ab00d7f6b1c",
+      "output": "assets/work/optimized/tessera/mural-pixel.webp",
+      "bytes": 10100,
+      "encoding": "WebP lossless",
+      "pixelIdentical": true,
+      "previewComparisons": [
+        {
+          "width": 460,
+          "lumaSsim": 1.0,
+          "meanRgbError": 0.0
+        },
+        {
+          "width": 920,
+          "lumaSsim": 1.0,
+          "meanRgbError": 0.0
+        }
+      ],
+      "outputSha256": "83fe572d2e1b37afd69bc6b44ba0ccd60688ecd1324c078b23c604bd010f6981"
+    },
+    {
+      "source": "assets/work/tessera/app-icon.png",
+      "originalBytes": 11784,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "sourceSha256": "99bac32e2e9acdd4671b35f8e4f3da973492eefd1d725016ea4a8c7682e8d039",
+      "output": "assets/work/optimized/tessera/app-icon.webp",
+      "bytes": 126,
+      "encoding": "WebP lossless",
+      "pixelIdentical": true,
+      "previewComparisons": [
+        {
+          "width": 460,
+          "lumaSsim": 1.0,
+          "meanRgbError": 0.0
+        },
+        {
+          "width": 920,
+          "lumaSsim": 1.0,
+          "meanRgbError": 0.0
+        }
+      ],
+      "outputSha256": "bac6c21c41ccfe41667b5370a7ef4d891ffe88a1a19eae72d56907a3c254d113"
+    },
+    {
+      "source": "assets/work/tessera/editor-light.png",
+      "originalBytes": 140136,
+      "dimensions": [
+        1220,
+        880
+      ],
+      "sourceSha256": "2f006065b135e7d57dc09874eddbe5f79b7441f28aa78c3334d6d3cc23b822ec",
+      "output": "assets/work/tessera/editor-light.png",
+      "bytes": 140136,
+      "encoding": "original",
+      "pixelIdentical": true
+    },
+    {
+      "source": "assets/work/tessera/editor-color.png",
+      "originalBytes": 107807,
+      "dimensions": [
+        1220,
+        880
+      ],
+      "sourceSha256": "10b2869afea4744e1a2d1351b3d0853280a162f9406608acc5a47d06d7b71b3e",
+      "output": "assets/work/tessera/editor-color.png",
+      "bytes": 107807,
+      "encoding": "original",
+      "pixelIdentical": true
+    },
+    {
+      "source": "assets/work/sonar/brand.png",
+      "originalBytes": 160086,
+      "dimensions": [
+        785,
+        438
+      ],
+      "sourceSha256": "ecca15f3a18df90775b62e0bc7f16bbe33bb950068409fb1decf630a8ed40620",
+      "output": "assets/work/optimized/sonar/brand.webp",
+      "bytes": 84546,
+      "encoding": "WebP lossless",
+      "pixelIdentical": true,
+      "previewComparisons": [
+        {
+          "width": 460,
+          "lumaSsim": 1.0,
+          "meanRgbError": 0.0
+        },
+        {
+          "width": 920,
+          "lumaSsim": 1.0,
+          "meanRgbError": 0.0
+        }
+      ],
+      "outputSha256": "8f7c9ebb5a995f2146061a71331c8bbf2da7d6bfe0f35fee740aa4740fd070c3"
+    },
+    {
+      "source": "assets/work/sonar/search.jpg",
+      "originalBytes": 35466,
+      "dimensions": [
+        372,
+        771
+      ],
+      "sourceSha256": "6f114ecc49b4b8dd31ef9e4f8fd1b445f3fbabb91697599decedbc53e99f1fe2",
+      "output": "assets/work/sonar/search.jpg",
+      "bytes": 35466,
+      "encoding": "original",
+      "pixelIdentical": true
+    },
+    {
+      "source": "assets/work/sonar/home.jpg",
+      "originalBytes": 52629,
+      "dimensions": [
+        372,
+        770
+      ],
+      "sourceSha256": "8ed93f035ec3ed4a75850679cc87fde1be96a8639ecba54799a9848311f387ec",
+      "output": "assets/work/sonar/home.jpg",
+      "bytes": 52629,
+      "encoding": "original",
+      "pixelIdentical": true
+    },
+    {
+      "source": "assets/work/sonar/favorites.png",
+      "originalBytes": 39231,
+      "dimensions": [
+        376,
+        771
+      ],
+      "sourceSha256": "987f402bdbcd6d58b739c864129f43688ee75ea7179c913c3246216f019e0502",
+      "output": "assets/work/optimized/sonar/favorites.webp",
+      "bytes": 17390,
+      "encoding": "WebP lossless",
+      "pixelIdentical": true,
+      "previewComparisons": [
+        {
+          "width": 460,
+          "lumaSsim": 1.0,
+          "meanRgbError": 0.0
+        },
+        {
+          "width": 920,
+          "lumaSsim": 1.0,
+          "meanRgbError": 0.0
+        }
+      ],
+      "outputSha256": "34ca9b1bbc5ce779bf42458bfe847a3352f17923f8627024c1a3a9ee4db7d6c1"
+    },
+    {
+      "source": "assets/work/sidequest/home.jpg",
+      "originalBytes": 79043,
+      "dimensions": [
+        1280,
+        720
+      ],
+      "sourceSha256": "6e37b665ef83664d739eb8b2c7b6b14cc3af8506086cf7e7d29cf133291e1eb3",
+      "output": "assets/work/sidequest/home.jpg",
+      "bytes": 79043,
+      "encoding": "original",
+      "pixelIdentical": true
+    },
+    {
+      "source": "assets/work/sidequest/map.jpg",
+      "originalBytes": 64410,
+      "dimensions": [
+        1265,
+        712
+      ],
+      "sourceSha256": "215d7a192ab916a32f1861beb16062ce4d9470d816c2a9095dd61aed73bdc4e9",
+      "output": "assets/work/sidequest/map.jpg",
+      "bytes": 64410,
+      "encoding": "original",
+      "pixelIdentical": true
+    },
+    {
+      "source": "assets/work/sidequest/library.jpg",
+      "originalBytes": 107682,
+      "dimensions": [
+        1280,
+        720
+      ],
+      "sourceSha256": "7608b4d51daa88efa3bc56a6bb0b05d7e2c7e4269b22d11cf76f5f6c2989eaa8",
+      "output": "assets/work/sidequest/library.jpg",
+      "bytes": 107682,
+      "encoding": "original",
+      "pixelIdentical": true
+    },
+    {
+      "source": "assets/work/kvasir/iris-turntable-detail-banner.webp",
+      "originalBytes": 214906,
+      "dimensions": [
+        1200,
+        800
+      ],
+      "sourceSha256": "5babab1359f4ec880ee33b09a70597933103d61bd2faab57b89846d460e7b5f8",
+      "output": "assets/work/kvasir/iris-turntable-detail-banner.webp",
+      "bytes": 214906,
+      "encoding": "original",
+      "pixelIdentical": true
+    }
+  ]
+}
