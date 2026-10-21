@@ -6,10 +6,11 @@
     <meta name="theme-color" content="#101010">
     <title>Record carousel studies — Timbuhtuk</title>
     <link rel="preload" href="assets/fonts/science-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/cascadia-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="assets/styles/fonts.css">
     <link rel="stylesheet" href="record-lab.css?v=wide-20261020-1">
     <script src="record-entrance-motion.js" defer></script>
-    <script src="record-lab.js?v=wide-20261020-1" defer></script>
+    <script src="record-lab.js?v=record-ready-20261021" defer></script>
 </head>
 <body data-variant="minimal">
     <header class="study-controls">
@@ -40,8 +41,10 @@
                 <g id="center-iris-pattern"></g>
             </defs>
             <g id="deck-layer" aria-hidden="true"></g>
-            <g id="record-arrival"><g id="record-rotor">
+            <g id="record-arrival">
                 <g id="disc-surface" aria-hidden="true"></g>
+                <g id="disc-label-rotor" aria-hidden="true"></g>
+                <g id="record-rotor">
                 <g id="printed-sections"></g>
             </g></g>
             <g id="reflection-layer" aria-hidden="true" pointer-events="none" clip-path="url(#disc-mask)"></g>

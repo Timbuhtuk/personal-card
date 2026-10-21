@@ -223,6 +223,12 @@ class AboutNavigation
         if (artwork?.name) { artwork.name.pointer.active = false; artwork.name.motion?.settle(); artwork.name.render(0, false); }
         if (target !== 'home') this.layer.scrollTop = 0;
         this.measure(); this.draw(target === 'home' ? 1 : 0);
+        if (target === 'about' && this.aboutFrame?.contentWindow?.RecordStudyPrepare)
+        {
+            await this.aboutFrame.contentWindow.RecordStudyPrepare();
+            if (version !== this.version) return;
+            this.measure(); this.draw(0);
+        }
         this.notifyAbout(target === 'about' ? 'enter' : from === 'about' ? 'leave' : 'hidden', animate && from !== target && !reducedMotion.matches);
         if (animate && from !== target && !reducedMotion.matches && this.context)
         {

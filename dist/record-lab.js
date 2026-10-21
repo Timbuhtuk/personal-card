@@ -3,6 +3,7 @@
     const stage = document.querySelector('.record-stage');
     const rotor = document.querySelector('#record-rotor');
     const surfaces = document.querySelector('#disc-surface');
+    const labelRotor = document.querySelector('#disc-label-rotor');
     const print = document.querySelector('#printed-sections');
     const deck = document.querySelector('#deck-layer');
     const hardware = document.querySelector('#hardware-layer');
@@ -45,7 +46,8 @@
     const copyMeasure = document.createElement('canvas').getContext('2d');
     let variant = 'minimal', selected = 0, rotation = 0, targetRotation = 0, armTrack = 0;
     let scene, armNode, frame = 0, gesture = null, resizeTimer, wheelSum = 0, wheelTime = -Infinity;
-    let sceneDirty = true, sceneBuilds = 0;
+    let sceneDirty = true, sceneBuilds = 0, assetsReady = false;
+    let labelNode;
     let grooveNodes = [];
     let centerDetail = new URL(location.href).searchParams.get('detail') === 'center';
     let reveal = embedded ? 0 : 1, revealFrame = 0;
@@ -271,7 +273,8 @@
         svg.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
         svg.dataset.centerOutside = cy > height ? 'true' : 'false';
         svg.dataset.recordDiameter = Math.round(radius * 2);
-        for (const layer of [deck, surfaces, print, reflections, hardware]) layer.replaceChildren();
+        for (const layer of [deck, surfaces, labelRotor, print, reflections, hardware]) layer.replaceChildren();
+        labelNode = null;
         grooveNodes = [];
         const clip = document.querySelector('#clip-circle');
         clip.setAttribute('cx', cx); clip.setAttribute('cy', cy); clip.setAttribute('r', radius);
@@ -303,7 +306,7 @@
             label.append(node('use', { href: '#center-iris-pattern' }));
             label.append(node('circle', { r: 2.5, fill: '#babeb4', stroke: '#101911', 'stroke-width': .7 }));
             label.append(node('circle', { cx: -.6, cy: -.8, r: .7, fill: '#eeefe7' }));
-            surfaces.append(label);
+            labelRotor.append(label); labelNode = label;
         }
         if (config.detail >= 3)
         {
@@ -327,7 +330,12 @@
     }
     function ensureScene()
     {
+        if (!assetsReady || !stage.clientWidth || !stage.clientHeight) return;
         if (sceneDirty || !scene || scene.width !== stage.clientWidth || scene.height !== stage.clientHeight) build();
+    }
+    function setTransform(item, value)
+    {
+        if (item.getAttribute('transform') !== value) item.setAttribute('transform', value);
     }
     function paint()
     {
@@ -335,8 +343,12 @@
         const mode = embedded ? entranceMode : 'cue';
         const state = RecordEntranceMotion.sample(mode, reveal, scene.width, scene.height);
         const { cx, cy, width, height } = scene;
-        rotor.setAttribute('transform', 'translate(' + state.x + ' ' + state.y + ') translate(' + cx + ' ' + cy + ') scale(' + state.scale + ') rotate(' + (rotation + state.angle).toFixed(4) + ') translate(' + -cx + ' ' + -cy + ')');
-        rotor.style.opacity = state.opacity;
+        // Circular grooves look identical at every angle: rotate only the print and the iris.
+        // Keep translation/scale on their common parent for the roll and camera studies.
+        setTransform(arrival, 'translate(' + state.x + ' ' + state.y + ') translate(' + cx + ' ' + cy + ') scale(' + state.scale + ') translate(' + -cx + ' ' + -cy + ')');
+        const turn = 'rotate(' + (rotation + state.angle).toFixed(4) + ' ' + cx + ' ' + cy + ')';
+        setTransform(rotor, turn); setTransform(labelRotor, turn);
+        arrival.style.opacity = state.opacity;
         hardware.style.opacity = state.armOpacity;
         print.style.opacity = state.textOpacity;
         if (scene.wide) print.querySelectorAll('[data-copy]').forEach(group => {
@@ -344,8 +356,7 @@
             const angle = mod(Number(group.dataset.copy) * 120 + rotation + 180, 360) - 180;
             group.style.opacity = Math.max(0, Math.min(1, (100 - Math.abs(angle)) / 25));
         });
-        const label = surfaces.querySelector('.iris-center-label');
-        if (label) label.style.opacity = state.textureOpacity;
+        if (labelNode) labelNode.style.opacity = state.textureOpacity;
         stage.dataset.entranceMode = mode;
         stage.dataset.entranceProgress = reveal.toFixed(3);
         if (mode === 'trace')
@@ -431,7 +442,7 @@
             const url = new URL(location.href); url.searchParams.set('variant', variant);
             history.pushState(null, '', url);
         }
-        build();
+        ensureScene();
     }
     document.querySelectorAll('button[data-variant]').forEach(button => button.addEventListener('click', () => chooseVariant(button.dataset.variant)));
     detailButton.addEventListener('click', () => {
@@ -495,7 +506,7 @@
             if ((phase === 'enter' || phase === 'leave') && animate) animateReveal(phase === 'enter', Math.max(100, Math.min(4000, duration || 1700)));
             else { finish(); ensureScene(); settleReveal(phase === 'visible' || phase === 'enter' ? 1 : 0); }
         });
-        colorScheme.addEventListener('change', () => { sceneDirty = true; build(); });
+        colorScheme.addEventListener('change', () => { sceneDirty = true; ensureScene(); });
     }
     const observer = new ResizeObserver(() => {
         clearTimeout(resizeTimer); resizeTimer = setTimeout(ensureScene, 80);
@@ -504,6 +515,16 @@
     buildCenterPattern();
     chooseVariant(new URLSearchParams(location.search).get('variant'), false);
     const texture = new Image(); texture.src = 'assets/record/iris-eye-v3.webp';
-    window.RecordStudyReady = Promise.all([document.fonts.ready, texture.decode()]).then(() => { sceneDirty = true; build(); });
+    // A hidden iframe has not requested the SVG text fonts yet; fonts.ready alone is too early.
+    const fonts = Promise.all([document.fonts.load('14px "Cascadia Code"'), document.fonts.load('600 40px "Science Gothic"')]).catch(() => {});
+    window.RecordStudyReady = Promise.all([fonts, texture.decode().catch(() => {})]).then(() => { assetsReady = true; sceneDirty = true; ensureScene(); });
     window.RecordStudyReady.catch(() => {});
+    window.RecordStudyPrepare = async () => {
+        await window.RecordStudyReady;
+        // The parent has now exposed the iframe at its final size, behind the closed seam.
+        clearTimeout(resizeTimer); ensureScene();
+        if (document.hidden || reduced.matches) return;
+        await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+        ensureScene();
+    };
 })();
