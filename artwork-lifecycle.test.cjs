@@ -24,11 +24,12 @@ class Field { resize() {} }
 class Name { initialize() {} render(delta) { nameFrames.push(delta); } }
 class Life { resize() {} render(time, delta) { lifeFrames.push({ time, delta }); } }
 const profile = { seed: 1, begin() {}, end() {} };
+const mobileContours = { matches: false, addEventListener(type, handler) { this.change = handler; } };
 const Imprint = new Function('Artwork', 'ContourScheduler', 'ContourField', 'TriangleName', 'LifeDivider',
     'previewProfile', 'randomGenerator', 'contourViewport', 'window', 'document', 'clock', 'paused', 'reducedMotion',
     artworkSource + '; return ProceduralImprint;')(Base, Scheduler, Field, Name, Life,
         profile, () => Math.random, (width, height) => ({ width, height, pixelWidth: width, pixelHeight: height }),
-        { devicePixelRatio: 1 }, { hidden: false }, 999999, false, { matches: false });
+        { devicePixelRatio: 1, matchMedia: () => mobileContours }, { hidden: false }, 999999, false, { matches: false });
 const panel = { dataset: { view: 'home' }, classList: { add() {} }, querySelectorAll: () => [{}] };
 const artwork = new Imprint(panel);
 artwork.resize();
@@ -60,4 +61,22 @@ panel.dataset.view = 'home';
 artwork.render(190000, 16);
 assert.equal(requests.at(-1) - last, 16, 'Finishing the transition must continue the same phase');
 assert.equal(nameFrames.length, namesBefore + 1);
+mobileContours.matches = true; mobileContours.change();
+const staticMeshes = requests.length, staticTime = artwork.contourTime;
+for (let q = 0; q < 600; q++) artwork.render(200000 + q * 16, 16);
+assert.equal(requests.length, staticMeshes, 'Mobile contours must not request recurring meshes');
+assert.equal(artwork.contourTime, staticTime, 'The mobile contour timeline must remain frozen');
+assert.equal(artwork.canvas.dataset.contourMotion, 'static');
+artwork.resize();
+assert.equal(requests.length, staticMeshes + 1, 'Resizing must rebuild the static background once');
+assert.equal(requests.at(-1), staticTime);
+mobileContours.matches = false; mobileContours.change();
+artwork.render(220000, 16);
+assert.equal(requests.at(-1), staticTime + 16, 'Returning to desktop must resume without catching up');
+assert.equal(artwork.canvas.dataset.contourMotion, 'animated');
+mobileContours.matches = true;
+const mobileStart = requests.length, phoneArtwork = new Imprint(panel);
+phoneArtwork.resize();
+for (let q = 0; q < 120; q++) phoneArtwork.render(q * 16, 16);
+assert.equal(requests.length, mobileStart + 1, 'A fresh mobile visit must request only its first static mesh');
 console.log('Artwork lifecycle passed: continuous transition geometry, no catch-up after long About visits or resize, independent Life bands and uninterrupted return to home.');

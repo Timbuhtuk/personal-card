@@ -185,6 +185,12 @@ class ProceduralImprint extends Artwork
         this.seed = previewProfile.seed ?? Math.floor(Math.random() * 0x100000000);
         this.random = randomGenerator(this.seed);
         this.contourTime = 0;
+        this.staticContours = window.matchMedia('(max-width: 767px), (hover: none) and (pointer: coarse)');
+        const updateContourMotion = () => {
+            this.canvas.dataset.contourMotion = this.staticContours.matches ? 'static' : 'animated';
+        };
+        this.staticContours.addEventListener('change', updateContourMotion);
+        updateContourMotion();
         this.dividers = [...panel.querySelectorAll('.life-divider')].map((element, q) => new LifeDivider(element, 8201 + q * 517));
         this.name = new TriangleName(panel, () => !paused && !reducedMotion.matches);
     }
@@ -224,8 +230,11 @@ class ProceduralImprint extends Artwork
         const view = this.panel.dataset.view || 'home';
         if (view === 'about' || view === 'work') return;
         if (view === 'home') this.name.render(delta, !paused && !reducedMotion.matches);
-        this.contourTime += delta;
-        this.geometry.request(this.contourTime);
+        if (!this.staticContours.matches)
+        {
+            this.contourTime += delta;
+            this.geometry.request(this.contourTime);
+        }
         this.paint();
     }
 

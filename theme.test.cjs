@@ -57,7 +57,8 @@ for (const page of ['index.html', 'work-lab.html', 'cursor-lab.html', 'entrance-
     if (page !== 'tessera-card-pier.html')
     {
         assert.match(html, /src="theme\.js"/, `${page} must refresh artwork when the preference changes`);
-        assert.ok(html.indexOf('src="theme.js"') < html.indexOf('src="' + (page === 'work-lab.html' ? 'work-lab.js' : 'app.js') + '"'), `${page} must initialize theme colors before artwork`);
+        const artworkScript = html.match(/src="(?:app|work-lab)\.js(?:\?[^"\s]*)?"/);
+        assert.ok(artworkScript && html.indexOf('src="theme.js"') < artworkScript.index, `${page} must initialize theme colors before artwork`);
     }
 }
 console.log('Theme passed: initial palette, live light/dark changes, canvas repaint and intact Life state.');
