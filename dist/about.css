@@ -16,7 +16,7 @@
 .about-back span { font-size: 16px; }
 .about-transitioning .imprint-copy { pointer-events: none; }
 .about-transitioning .imprint-copy * { pointer-events: none !important; }
-.is-about .imprint-copy, .is-about .imprint-art, .is-about .imprint-name-art { visibility: hidden; }
+/* The opaque About panel already covers Home; keep its inert layers painted for the return. */
 .is-about .entrance-controls, .about-transitioning .entrance-controls { display: none; }
 html:not(.about-enhanced) #about:target[hidden] { display: flex !important; }
 @media (min-width: 601px) and (hover: hover) and (pointer: fine) {
@@ -43,8 +43,9 @@ html:not(.about-enhanced) #about:target[hidden] { display: flex !important; }
 .work-frame { display: block; width: 100%; height: 100%; border: 0; background: var(--ts-color-canvas); }
 .about-view--record { padding: 0; overflow: hidden; display: block; }
 .about-frame { display: block; width: 100%; height: 100%; border: 0; background: var(--ts-color-canvas); }
+.about-view--record:not([hidden]) .about-frame { transform: translateZ(0); will-change: transform; }
 .about-view--record, .work-view { contain: layout paint; }
-.about-transitioning .about-frame, .about-transitioning .work-frame { transform: translateZ(0); will-change: transform; }
+.about-transitioning .work-frame { transform: translateZ(0); will-change: transform; }
 .about-view .about-record-title { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .about-view--record .about-back { position: absolute; z-index: 2; left: 4.5vw; bottom: 24px; margin: 0; min-width: 44px; min-height: 44px; color: #e9e9e5; --ts-color-text: #fff; text-decoration: none; }
 .about-view--record .about-back span { font-size: 12px; }

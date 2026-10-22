@@ -162,6 +162,19 @@ class AboutNavigation
             this.frame = requestAnimationFrame(tick);
         });
     }
+    prepareHome()
+    {
+        // Keep the seam fully open while the browser prepares the layers below About.
+        // Use the same cancellable frame slot as the transition, so resize/back cannot revive it.
+        return new Promise(resolve => {
+            this.complete = resolve;
+            this.frame = requestAnimationFrame(() => {
+                this.frame = requestAnimationFrame(() => {
+                    this.frame = 0; this.complete = null; resolve();
+                });
+            });
+        });
+    }
     cancel()
     {
         cancelAnimationFrame(this.frame); this.frame = 0;
@@ -228,6 +241,11 @@ class AboutNavigation
             await this.aboutFrame.contentWindow.RecordStudyPrepare();
             if (version !== this.version) return;
             this.measure(); this.draw(0);
+        }
+        if (target === 'home' && from === 'about' && this.aboutFrame && animate && !reducedMotion.matches && !document.hidden && this.context)
+        {
+            await this.prepareHome();
+            if (version !== this.version) return;
         }
         this.notifyAbout(target === 'about' ? 'enter' : from === 'about' ? 'leave' : 'hidden', animate && from !== target && !reducedMotion.matches);
         if (animate && from !== target && !reducedMotion.matches && this.context)
