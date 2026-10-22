@@ -1,5 +1,7 @@
 .about-link, .work-link { font-weight: 400; color: inherit; pointer-events: auto; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 5px; }
 .about-link:focus-visible, .work-link:focus-visible { text-decoration: underline; }
+.imprint-copy > p .about-link, .imprint-copy > p .work-link { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding: 12px 8px; font-size: calc(1em + 4px); line-height: 1.25; vertical-align: baseline; touch-action: manipulation; }
+.imprint-copy > p .text-link::after { left: 8px; right: 8px; bottom: 8px; }
 .about-view { position: absolute; inset: 0; z-index: 8; display: flex; flex-direction: column; overflow: auto; overscroll-behavior: contain; padding: 40px 24px; background: var(--ts-color-canvas); color: var(--ts-color-text); }
 .about-inner { width: min(690px, 100%); margin: auto; flex: none; text-align: center; }
 .about-eyebrow { color: var(--ts-color-textMuted); font-size: 9px; letter-spacing: .16em; }
