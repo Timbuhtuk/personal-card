@@ -1,6 +1,14 @@
 class LiquidSeam
 {
     static duration = 1700;
+    static keyframes(width, height, orientation = 'vertical', closing = false, count = 64)
+    {
+        return Array.from({ length: count + 1 }, (_, q) => {
+            const offset = q / count;
+            const geometry = this.geometry(closing ? 1 - offset : offset, width, height, orientation);
+            return { offset, clipPath: `path("${geometry.path}")` };
+        });
+    }
     static geometry(t, width, height, orientation = 'vertical')
     {
         if (orientation === 'horizontal')

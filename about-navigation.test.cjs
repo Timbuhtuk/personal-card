@@ -153,5 +153,27 @@ function fixture(hash='',canvas=true,work=false,record=false,search='')
     assert.match(slowRecord.selectors.get('.about-frame').src,/entrance=spin$/);
     const selectedRecord=fixture('',true,false,true,'?recordEntrance=spin');
     assert.equal(selectedRecord.navigation.recordEntrance,'cue','The selected main-page entrance stays Cue outside laboratory previews');
-    console.log('Liquid seam navigation passed, including record readiness, entrance/exit messages, focus, stale loads and record fallback.');
+    const nativeMask=fixture('',true,false,true),nativeLayer=nativeMask.selectors.get('#about');
+    nativeMask.window.matchMedia=()=>({matches:true});
+    let maskWrites=0;const effects=[];
+    nativeLayer.style=new Proxy({}, {set(target,key,value){if(key==='clipPath')maskWrites++;target[key]=value;return true;}});
+    nativeLayer.animate=(keyframes,options)=>{
+        let reject;
+        const effect={keyframes,options,paused:false,played:false,cancelled:false,finished:new Promise((resolve,failed)=>reject=failed),
+            pause(){this.paused=true;},play(){this.played=true;},cancel(){this.cancelled=true;reject(new Error('Cancelled'));}};
+        effects.push(effect);return effect;
+    };
+    const nativeOpen=nativeMask.navigation.go('about');nativeMask.selectors.get('.about-frame').dispatch('load');await nativeMask.flush();await nativeOpen;
+    assert.equal(effects.length,1);assert.equal(effects[0].keyframes.length,65);
+    assert.ok(effects[0].paused&&effects[0].played&&effects[0].cancelled);
+    assert.ok(maskWrites<=3,'Native masks must not rewrite clip-path on every JavaScript frame');
+    maskWrites=0;
+    const nativeClose=nativeMask.navigation.go('home');await nativeMask.flush();await nativeClose;
+    assert.equal(effects.length,2);assert.ok(maskWrites<=3);
+    assert.equal(effects[1].keyframes[0].clipPath,effects[0].keyframes.at(-1).clipPath);
+    assert.equal(nativeMask.navigation.panel.dataset.view,'home');
+    nativeLayer.animate=()=>{throw new Error('Native masks unavailable');};maskWrites=0;
+    const fallbackMask=nativeMask.navigation.go('about');await nativeMask.flush();await fallbackMask;
+    assert.ok(maskWrites>80,'Animation failures must fall back to the working script-driven seam');
+    console.log('Liquid seam navigation passed, including record readiness, native mobile masks, script fallback, preparation cancellation and reverse transitions.');
 })().catch(e=>{console.error(e);process.exitCode=1;});

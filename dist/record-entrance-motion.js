@@ -42,5 +42,25 @@
         }
         return state;
     }
-    return { modes, sample };
+    function cueKeyframes(scene, from, target, rotation, armTrack, count = 64)
+    {
+        const frames = { rotor: [], arrival: [], hardware: [], arm: [], controls: [] };
+        for (let q = 0; q <= count; q++)
+        {
+            const offset = q / count, ease = offset * offset * (3 - 2 * offset);
+            const progress = from + (target - from) * ease;
+            const state = sample('cue', progress, scene.width, scene.height);
+            frames.rotor.push({ offset, transform: `translate(${scene.cx}px, ${scene.cy}px) rotate(${rotation + state.angle}deg) translate(${-scene.cx}px, ${-scene.cy}px)` });
+            frames.arrival.push({ offset, opacity: state.opacity });
+            frames.hardware.push({ offset, opacity: state.armOpacity });
+            frames.controls.push({ offset, opacity: progress });
+            if (scene.arm)
+            {
+                const arm = scene.arm;
+                frames.arm.push({ offset, transform: `translate(${arm.x}px, ${arm.y}px) rotate(${arm.angle + armTrack * (arm.trackSweep || 2) + state.armAngle}deg) scale(${arm.scale || 1})` });
+            }
+        }
+        return frames;
+    }
+    return { modes, sample, cueKeyframes };
 });

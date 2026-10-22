@@ -140,7 +140,7 @@ class AboutNavigation
     draw(t)
     {
         const geometry = LiquidSeam.geometry(t, this.width, this.height, this.orientation);
-        this.layer.style.clipPath = `path("${geometry.path}")`;
+        if (!this.maskAnimation) this.layer.style.clipPath = `path("${geometry.path}")`;
         const c = this.context; if (!c) return;
         c.clearRect(0, 0, this.width, this.height);
         for (const edge of geometry.edges)
@@ -151,9 +151,24 @@ class AboutNavigation
     }
     play(target)
     {
+        this.maskAnimation = null;
+        const mobile = window.matchMedia?.('(max-width: 767px), (hover: none) and (pointer: coarse)').matches;
+        if (mobile && typeof this.layer.animate === 'function')
+        {
+            try
+            {
+                const frames = LiquidSeam.keyframes(this.width, this.height, this.orientation, target === 'home');
+                this.maskAnimation = this.layer.animate(frames, { duration: this.transitionDuration, easing: 'linear', fill: 'both' });
+                this.maskAnimation.finished.catch(() => {}); this.maskAnimation.pause();
+                this.fx.dataset.maskEngine = 'native';
+            }
+            catch { this.maskAnimation?.cancel(); this.maskAnimation = null; }
+        }
+        if (!this.maskAnimation) this.fx.dataset.maskEngine = 'script';
         return new Promise(resolve => {
             this.complete = resolve; let time = 0, previous = 0;
             const tick = now => {
+                if (!previous && this.maskAnimation) this.maskAnimation.play();
                 time += previous ? now - previous : 0; previous = now;
                 const t = Math.min(1, time / this.transitionDuration); this.draw(target === 'home' ? 1 - t : t);
                 if (t < 1) this.frame = requestAnimationFrame(tick);
@@ -177,6 +192,7 @@ class AboutNavigation
     }
     cancel()
     {
+        this.maskAnimation?.cancel(); this.maskAnimation = null;
         cancelAnimationFrame(this.frame); this.frame = 0;
         const complete = this.complete; this.complete = null; complete?.();
         this.context?.clearRect(0, 0, this.width || 0, this.height || 0);

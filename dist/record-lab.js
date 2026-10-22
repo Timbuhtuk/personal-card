@@ -15,6 +15,7 @@
     const requestedEntrance = new URLSearchParams(location.search).get('entrance');
     const entranceMode = RecordEntranceMotion.modes.includes(requestedEntrance) ? requestedEntrance : 'cue';
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+    const mobileMotion = matchMedia('(max-width: 767px), (hover: none) and (pointer: coarse)');
     const embedded = new URLSearchParams(location.search).get('embedded') === '1';
     const copyPreview = new URLSearchParams(location.search).get('copyPreview') === '1';
     const requestedCopy = new URLSearchParams(location.search).get('copy');
@@ -51,18 +52,60 @@
     let grooveNodes = [];
     let centerDetail = new URL(location.href).searchParams.get('detail') === 'center';
     let reveal = embedded ? 0 : 1, revealFrame = 0;
+    let nativeReveal = null;
+    function cancelNativeReveal()
+    {
+        if (!nativeReveal) return;
+        const current = nativeReveal; nativeReveal = null;
+        const time = current.effects[0]?.currentTime;
+        if (typeof time === 'number')
+        {
+            const t = Math.max(0, Math.min(1, time / current.duration));
+            reveal = current.from + (current.target - current.from) * t * t * (3 - 2 * t);
+        }
+        for (const effect of current.effects) effect.cancel();
+    }
+    function playNativeCue(from, target, duration)
+    {
+        if (!embedded || entranceMode !== 'cue' || !mobileMotion.matches || scene?.wide || typeof rotor.animate !== 'function') return false;
+        const frames = RecordEntranceMotion.cueKeyframes(scene, from, target, rotation, armTrack);
+        const controls = document.querySelector('.track-controls');
+        const items = [[rotor, frames.rotor], [labelRotor, frames.rotor], [arrival, frames.arrival], [hardware, frames.hardware], [controls, frames.controls]];
+        if (armNode) items.push([armNode, frames.arm]);
+        const current = { from, target, duration, effects: [] };
+        try
+        {
+            for (const [item, keyframes] of items)
+            {
+                if (!item) continue;
+                item.style.transformOrigin = '0px 0px'; item.style.transformBox = 'view-box';
+                const effect = item.animate(keyframes, { duration, easing: 'linear', fill: 'both' });
+                // Install rejection handlers immediately, including partially-created batches.
+                effect.finished.catch(() => {}); current.effects.push(effect);
+            }
+        }
+        catch { for (const effect of current.effects) effect.cancel(); return false; }
+        nativeReveal = current; stage.dataset.motionEngine = 'native';
+        Promise.all(current.effects.map(effect => effect.finished)).then(() => {
+            if (nativeReveal === current) settleReveal(target);
+        }).catch(() => {});
+        return true;
+    }
     function settleReveal(value)
     {
+        cancelNativeReveal();
         cancelAnimationFrame(revealFrame); revealFrame = 0; reveal = value;
         stage.dataset.entrance = value ? 'visible' : 'hidden'; paint();
     }
     function animateReveal(opening, duration)
     {
-        cancelAnimationFrame(revealFrame); finish(); ensureScene();
+        cancelAnimationFrame(revealFrame); cancelNativeReveal(); finish(); ensureScene();
         if (reduced.matches || document.hidden) { settleReveal(opening ? 1 : 0); return; }
         const from = reveal, target = opening ? 1 : 0;
         let start;
         stage.dataset.entrance = opening ? 'entering' : 'leaving';
+        if (playNativeCue(from, target, duration)) return;
+        stage.dataset.motionEngine = 'script';
         const tick = now => {
             if (start === undefined) start = now;
             const t = Math.min(1, (now - start) / duration);
@@ -254,6 +297,7 @@
     }
     function build()
     {
+        cancelNativeReveal();
         finish();
         const width = stage.clientWidth, height = stage.clientHeight;
         if (!width || !height) return;

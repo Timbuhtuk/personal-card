@@ -1,5 +1,20 @@
 const assert = require('node:assert/strict');
-const { modes, sample } = require('./dist/record-entrance-motion.js');
+const { modes, sample, cueKeyframes } = require('./dist/record-entrance-motion.js');
+const nativeScene={width:390,height:748,cx:225,cy:860,arm:{x:396,y:90,angle:35,trackSweep:.8}};
+const forward=cueKeyframes(nativeScene,0,1,-240,2),reverse=cueKeyframes(nativeScene,1,0,-240,2);
+for(let q=0;q<=64;q++)
+{
+    const p=q/64,ease=p*p*(3-2*p),expected=sample('cue',ease,390,748);
+    assert.ok(Math.abs(forward.arrival[q].opacity-expected.opacity)<1e-12);
+    assert.ok(Math.abs(forward.hardware[q].opacity-expected.armOpacity)<1e-12);
+    assert.ok(Math.abs(forward.controls[q].opacity-ease)<1e-12);
+    for(const name of ['rotor','arm'])
+    {
+        const first=forward[name][q].transform.match(/-?\d+(?:\.\d+)?/g).map(Number);
+        const second=reverse[name][64-q].transform.match(/-?\d+(?:\.\d+)?/g).map(Number);
+        first.forEach((value,index)=>assert.ok(Math.abs(value-second[index])<1e-8,'Native Cue must reverse the same transforms'));
+    }
+}
 for (const [width, height] of [[320, 480], [390, 748], [1280, 592], [3840, 1800]])
     for (const mode of modes)
         for (let q = 0; q <= 100; q++)

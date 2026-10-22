@@ -25,3 +25,19 @@ for(const [w,h] of [[320,520],[971,600],[1920,1080],[5000,2500]])for(let q=0;q<=
     if(q===100){assert.ok(first.every(p=>p.y<0));assert.ok(second.every(p=>p.y>h));}
 }
 console.log('404 horizontal Work frames are exact transposes of the approved seam, with full coverage and exact reverse.');
+for (const orientation of ['vertical','horizontal'])
+{
+    const forward = Seam.keyframes(390,748,orientation), reverse = Seam.keyframes(390,748,orientation,true);
+    assert.equal(forward.length,65);
+    for (let q=0;q<forward.length;q++)
+    {
+        assert.equal(forward[q].clipPath,`path("${Seam.geometry(q/64,390,748,orientation).path}")`);
+        assert.equal(reverse[q].clipPath,forward[64-q].clipPath);
+    }
+    const points = path => path.match(/-?\d+(?:\.\d+)?/g).map(Number);
+    for (let q=0;q<64;q++)
+    {
+        const a=points(forward[q].clipPath), b=points(forward[q+1].clipPath), actual=points(Seam.geometry((q+.5)/64,390,748,orientation).path);
+        actual.forEach((value,index)=>assert.ok(Math.abs(value-(a[index]+b[index])/2)<.15,'Native interpolation must retain the mobile seam within 0.15px'));
+    }
+}
